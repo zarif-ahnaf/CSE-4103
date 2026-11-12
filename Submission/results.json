@@ -1,0 +1,1341 @@
+{
+  "given": {
+    "urban": {
+      "area_km2": 4.0,
+      "subs": 10000,
+      "active": 300,
+      "rate": 0.2,
+      "n": 3.5,
+      "outage_h": 8
+    },
+    "rural": {
+      "area_km2": 25.0,
+      "subs": 2000,
+      "active": 50,
+      "rate": 0.1,
+      "n": 3.0,
+      "outage_h": 24
+    }
+  },
+  "const": {
+    "BW_MHz": 10,
+    "P_BS": 43.0,
+    "P_MS": 23.0,
+    "P_BS_USER": 23.0,
+    "power_split": 20.0,
+    "NF_BS": 5.0,
+    "NF_MS": 7.0,
+    "G_BS_900": 16.0,
+    "G_BS_1800": 18.0,
+    "G_MS": 0.0,
+    "L_feeder": 0.5,
+    "L_body": 3.0,
+    "CN_req": 7.0,
+    "noise_bs": -98.98,
+    "noise_ms": -96.98,
+    "sens_bs": -91.98,
+    "sens_ms": -89.98,
+    "fspl900_100m": 71.53,
+    "fspl1800_100m": 77.55,
+    "pcm_rate": 64000.0,
+    "pcm_sqnr": 49.92,
+    "pcm_bw_min": 32000.0,
+    "load_target": 70.0
+  },
+  "link": [
+    {
+      "area": "urban",
+      "freq_MHz": 900.0,
+      "n": 3.5,
+      "indoor": false,
+      "margin": 12.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 38.5,
+      "rx_ul": 35.5,
+      "rx_dl": 35.5,
+      "pl_ul": 127.48,
+      "pl_dl": 125.48,
+      "pl_ul_net": 115.48,
+      "pl_dl_net": 113.48,
+      "R_ul_m": 1801.7,
+      "R_dl_m": 1579.5,
+      "R_cov_m": 1579.5,
+      "limiting": "downlink",
+      "pl_gross_cov": 125.48,
+      "gap_db": 2.0
+    },
+    {
+      "area": "urban",
+      "freq_MHz": 900.0,
+      "n": 3.5,
+      "indoor": true,
+      "margin": 24.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 38.5,
+      "rx_ul": 35.5,
+      "rx_dl": 35.5,
+      "pl_ul": 127.48,
+      "pl_dl": 125.48,
+      "pl_ul_net": 103.48,
+      "pl_dl_net": 101.48,
+      "R_ul_m": 818.1,
+      "R_dl_m": 717.3,
+      "R_cov_m": 717.3,
+      "limiting": "downlink",
+      "pl_gross_cov": 125.48,
+      "gap_db": 2.0
+    },
+    {
+      "area": "urban",
+      "freq_MHz": 1800.0,
+      "n": 3.5,
+      "indoor": false,
+      "margin": 12.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 40.5,
+      "rx_ul": 37.5,
+      "rx_dl": 37.5,
+      "pl_ul": 129.48,
+      "pl_dl": 127.48,
+      "pl_ul_net": 117.48,
+      "pl_dl_net": 115.48,
+      "R_ul_m": 1382.9,
+      "R_dl_m": 1212.4,
+      "R_cov_m": 1212.4,
+      "limiting": "downlink",
+      "pl_gross_cov": 127.48,
+      "gap_db": 2.0
+    },
+    {
+      "area": "urban",
+      "freq_MHz": 1800.0,
+      "n": 3.5,
+      "indoor": true,
+      "margin": 24.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 40.5,
+      "rx_ul": 37.5,
+      "rx_dl": 37.5,
+      "pl_ul": 129.48,
+      "pl_dl": 127.48,
+      "pl_ul_net": 105.48,
+      "pl_dl_net": 103.48,
+      "R_ul_m": 628.0,
+      "R_dl_m": 550.6,
+      "R_cov_m": 550.6,
+      "limiting": "downlink",
+      "pl_gross_cov": 127.48,
+      "gap_db": 2.0
+    },
+    {
+      "area": "rural",
+      "freq_MHz": 900.0,
+      "n": 3.0,
+      "indoor": false,
+      "margin": 12.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 38.5,
+      "rx_ul": 35.5,
+      "rx_dl": 35.5,
+      "pl_ul": 127.48,
+      "pl_dl": 125.48,
+      "pl_ul_net": 115.48,
+      "pl_dl_net": 113.48,
+      "R_ul_m": 2917.1,
+      "R_dl_m": 2502.0,
+      "R_cov_m": 2502.0,
+      "limiting": "downlink",
+      "pl_gross_cov": 125.48,
+      "gap_db": 2.0
+    },
+    {
+      "area": "rural",
+      "freq_MHz": 900.0,
+      "n": 3.0,
+      "indoor": true,
+      "margin": 20.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 38.5,
+      "rx_ul": 35.5,
+      "rx_dl": 35.5,
+      "pl_ul": 127.48,
+      "pl_dl": 125.48,
+      "pl_ul_net": 107.48,
+      "pl_dl_net": 105.48,
+      "R_ul_m": 1578.6,
+      "R_dl_m": 1354.0,
+      "R_cov_m": 1354.0,
+      "limiting": "downlink",
+      "pl_gross_cov": 125.48,
+      "gap_db": 2.0
+    },
+    {
+      "area": "rural",
+      "freq_MHz": 1800.0,
+      "n": 3.0,
+      "indoor": false,
+      "margin": 12.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 40.5,
+      "rx_ul": 37.5,
+      "rx_dl": 37.5,
+      "pl_ul": 129.48,
+      "pl_dl": 127.48,
+      "pl_ul_net": 117.48,
+      "pl_dl_net": 115.48,
+      "R_ul_m": 2142.6,
+      "R_dl_m": 1837.7,
+      "R_cov_m": 1837.7,
+      "limiting": "downlink",
+      "pl_gross_cov": 127.48,
+      "gap_db": 2.0
+    },
+    {
+      "area": "rural",
+      "freq_MHz": 1800.0,
+      "n": 3.0,
+      "indoor": true,
+      "margin": 20.0,
+      "eirp_ms": 20.0,
+      "eirp_bs": 40.5,
+      "rx_ul": 37.5,
+      "rx_dl": 37.5,
+      "pl_ul": 129.48,
+      "pl_dl": 127.48,
+      "pl_ul_net": 109.48,
+      "pl_dl_net": 107.48,
+      "R_ul_m": 1159.5,
+      "R_dl_m": 994.5,
+      "R_cov_m": 994.5,
+      "limiting": "downlink",
+      "pl_gross_cov": 127.48,
+      "gap_db": 2.0
+    }
+  ],
+  "cover": {
+    "urban": {
+      "R_m": 1579.5,
+      "site_area_km2": 6.48,
+      "required_float": 0.62,
+      "sweep": [
+        {
+          "n": 1,
+          "outdoor": 99.0,
+          "indoor": 84.1
+        },
+        {
+          "n": 2,
+          "outdoor": 99.6,
+          "indoor": 91.1
+        },
+        {
+          "n": 3,
+          "outdoor": 99.9,
+          "indoor": 95.2
+        },
+        {
+          "n": 4,
+          "outdoor": 100.0,
+          "indoor": 98.5
+        },
+        {
+          "n": 5,
+          "outdoor": 99.9,
+          "indoor": 97.6
+        }
+      ],
+      "n_coverage": 1,
+      "layout": [
+        [
+          1.0,
+          1.0
+        ]
+      ],
+      "outdoor": 99.0,
+      "indoor": 84.1
+    },
+    "rural": {
+      "R_m": 2502.0,
+      "site_area_km2": 16.26,
+      "required_float": 1.54,
+      "sweep": [
+        {
+          "n": 1,
+          "outdoor": 94.9,
+          "indoor": 70.1
+        },
+        {
+          "n": 2,
+          "outdoor": 97.8,
+          "indoor": 82.0
+        },
+        {
+          "n": 3,
+          "outdoor": 99.0,
+          "indoor": 89.3
+        },
+        {
+          "n": 4,
+          "outdoor": 99.9,
+          "indoor": 96.3
+        },
+        {
+          "n": 5,
+          "outdoor": 99.6,
+          "indoor": 94.6
+        }
+      ],
+      "n_coverage": 2,
+      "layout": [
+        [
+          1.25,
+          2.5
+        ],
+        [
+          3.75,
+          2.5
+        ]
+      ],
+      "outdoor": 97.8,
+      "indoor": 82.0
+    }
+  },
+  "doppler": {
+    "v_ms": 13.889,
+    "f900_hz": 41.67,
+    "f1800_hz": 83.33,
+    "lam900_m": 0.333,
+    "lam1800_m": 0.167,
+    "Tc900_ms": 10.2,
+    "Tc1800_ms": 5.1,
+    "Ts_lte_subframe_ms": 1.0,
+    "note": "Tc >> 1 ms subframe at both bands -> slow fading, pilot-aided tracking is sufficient"
+  },
+  "delay": {
+    "weights": [
+      0.6025,
+      0.302,
+      0.0955
+    ],
+    "mean_us": 0.5885,
+    "meansq_us2": 1.1614,
+    "rms_us": 0.9029,
+    "bc50_kHz": 221.5,
+    "bc90_kHz": 22.2,
+    "Ts_us": 66.66666666666667,
+    "symbol_rate_kHz": 15.0,
+    "cp_us": 4.7,
+    "note": "RMS spread 0.90 us < 4.7 us LTE normal CP -> ISI absorbed by the cyclic prefix"
+  },
+  "ber": {
+    "ebn0": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "bpsk_sim": [
+      0.0788425,
+      0.05626,
+      0.037595,
+      0.0231,
+      0.0123525,
+      0.005745,
+      0.0024125,
+      0.000735,
+      0.0001675,
+      6.75e-05,
+      2.5e-06,
+      0.0,
+      0.0
+    ],
+    "qpsk_sim": [
+      0.07838375,
+      0.0562,
+      0.03736,
+      0.02294125,
+      0.01271125,
+      0.00597625,
+      0.00234,
+      0.00074,
+      0.0001775,
+      2.75e-05,
+      3.75e-06,
+      0.0,
+      0.0
+    ],
+    "theory": [
+      0.07864960352514258,
+      0.05628195197654147,
+      0.03750612835892598,
+      0.022878407561085334,
+      0.012500818040737566,
+      0.005953867147778662,
+      0.002388290780932807,
+      0.0007726748153784446,
+      0.00019090777407599314,
+      3.36272284196176e-05,
+      3.87210821552205e-06,
+      2.613067953575205e-07,
+      9.006010350628787e-09
+    ]
+  },
+  "impair": {
+    "phase": [
+      {
+        "deg": 0,
+        "ber": 5e-06
+      },
+      {
+        "deg": 10,
+        "ber": 6.75e-05
+      },
+      {
+        "deg": 20,
+        "ber": 0.00188
+      },
+      {
+        "deg": 30,
+        "ber": 0.0252625
+      },
+      {
+        "deg": 40,
+        "ber": 0.1455325
+      },
+      {
+        "deg": 45,
+        "ber": 0.2500425
+      }
+    ],
+    "timing": [
+      {
+        "frac": 0,
+        "ber": 5e-06
+      },
+      {
+        "frac": 0.1,
+        "ber": 0.0001275
+      },
+      {
+        "frac": 0.2,
+        "ber": 0.0082125
+      },
+      {
+        "frac": 0.3,
+        "ber": 0.0082125
+      },
+      {
+        "frac": 0.4,
+        "ber": 0.08228
+      },
+      {
+        "frac": 0.5,
+        "ber": 0.250245
+      }
+    ],
+    "ebn0": 10.0
+  },
+  "reuse": [
+    {
+      "area": "urban",
+      "N": 1,
+      "n": 3.5,
+      "Q": 1.732,
+      "D_over_R": 1.732,
+      "ci_omni": 0.57,
+      "ci_3sector": 5.34,
+      "ci_6sector": 8.35
+    },
+    {
+      "area": "urban",
+      "N": 3,
+      "n": 3.5,
+      "Q": 3.0,
+      "D_over_R": 3.0,
+      "ci_omni": 8.92,
+      "ci_3sector": 13.69,
+      "ci_6sector": 16.7
+    },
+    {
+      "area": "rural",
+      "N": 1,
+      "n": 3.0,
+      "Q": 1.732,
+      "D_over_R": 1.732,
+      "ci_omni": -0.62,
+      "ci_3sector": 4.15,
+      "ci_6sector": 7.16
+    },
+    {
+      "area": "rural",
+      "N": 3,
+      "n": 3.0,
+      "Q": 3.0,
+      "D_over_R": 3.0,
+      "ci_omni": 6.53,
+      "ci_3sector": 11.3,
+      "ci_6sector": 14.31
+    }
+  ],
+  "cap": [
+    {
+      "area": "urban",
+      "nsites": 2,
+      "carriers": [
+        900,
+        1800
+      ],
+      "per_sector_900": 6.67,
+      "per_sector_1800": 20.0,
+      "per_site": 80.0,
+      "total": 160.0,
+      "demand": 60.0,
+      "load": 37.5,
+      "backhaul_Mbps": 1000.0,
+      "backhaul_load": 3.0
+    },
+    {
+      "area": "rural",
+      "nsites": 2,
+      "carriers": [
+        900
+      ],
+      "per_sector_900": 6.67,
+      "per_sector_1800": 0.0,
+      "per_site": 20.0,
+      "total": 40.0,
+      "demand": 5.0,
+      "load": 12.5,
+      "backhaul_Mbps": 1000.0,
+      "backhaul_load": 0.25
+    }
+  ],
+  "cap_growth": [
+    {
+      "area": "urban",
+      "nsites": 2,
+      "carriers": [
+        900,
+        1800
+      ],
+      "per_sector_900": 6.67,
+      "per_sector_1800": 20.0,
+      "per_site": 80.0,
+      "total": 160.0,
+      "demand": 90.0,
+      "load": 56.2,
+      "backhaul_Mbps": 1000.0,
+      "backhaul_load": 4.5
+    },
+    {
+      "area": "rural",
+      "nsites": 2,
+      "carriers": [
+        900
+      ],
+      "per_sector_900": 6.67,
+      "per_sector_1800": 0.0,
+      "per_site": 20.0,
+      "total": 40.0,
+      "demand": 7.5,
+      "load": 18.7,
+      "backhaul_Mbps": 1000.0,
+      "backhaul_load": 0.38
+    }
+  ],
+  "cap_one_site": {
+    "area": "urban",
+    "nsites": 1,
+    "carriers": [
+      900,
+      1800
+    ],
+    "per_sector_900": 6.67,
+    "per_sector_1800": 20.0,
+    "per_site": 80.0,
+    "total": 80.0,
+    "demand": 60.0,
+    "load": 75.0,
+    "backhaul_Mbps": 1000.0,
+    "backhaul_load": 6.0
+  },
+  "fail": {
+    "area": "urban",
+    "demand": 60.0,
+    "cap_remaining": 80.0,
+    "load": 75.0,
+    "demand_growth": 90.0,
+    "load_growth": 112.5,
+    "shortfall_Mbps": 10.0
+  },
+  "voice": [
+    {
+      "area": "urban",
+      "subs": 10000,
+      "erlang_per": 0.02,
+      "offered": 200.0,
+      "channels": 214,
+      "blocking": 1.993,
+      "blocking_prev": 2.176,
+      "utilisation": 93.5,
+      "channels_per_site": 107.0,
+      "channels_per_sector": 35.7
+    },
+    {
+      "area": "rural",
+      "subs": 2000,
+      "erlang_per": 0.02,
+      "offered": 40.0,
+      "channels": 50,
+      "blocking": 1.869,
+      "blocking_prev": 2.381,
+      "utilisation": 80.0,
+      "channels_per_site": 25.0,
+      "channels_per_sector": 8.3
+    }
+  ],
+  "codecs": [
+    {
+      "name": "PCM, 8 bit @ 8 kHz (G.711 A-law)",
+      "rate": 64.0,
+      "bw": "64 kHz (baseband)",
+      "quality": "Toll, 4.3 MOS",
+      "complexity": "Very low",
+      "use": "PSTN / microwave backhaul"
+    },
+    {
+      "name": "DPCM, 4 bit @ 8 kHz",
+      "rate": 32.0,
+      "bw": "32 kHz",
+      "quality": "Good, 4.0 MOS",
+      "complexity": "Low",
+      "use": "Legacy digital links"
+    },
+    {
+      "name": "Delta modulation, 1 bit @ 16 kHz",
+      "rate": 16.0,
+      "bw": "16 kHz",
+      "quality": "Fair, 2.8 MOS",
+      "complexity": "Very low",
+      "use": "Low-cost simple links"
+    },
+    {
+      "name": "LPC-10 vocoder",
+      "rate": 2.4,
+      "bw": "2.4 kHz",
+      "quality": "Synthetic, 2.6 MOS",
+      "complexity": "High",
+      "use": "Military / satellite"
+    },
+    {
+      "name": "AMR-NB 12.2 kbit/s (ACELP/LPC)",
+      "rate": 12.2,
+      "bw": "12.2 kHz",
+      "quality": "Good, 3.9 MOS",
+      "complexity": "High",
+      "use": "GSM / VoLTE  <== SELECTED"
+    },
+    {
+      "name": "EVS 13.2 kbit/s",
+      "rate": 13.2,
+      "bw": "13.2 kHz",
+      "quality": "Excellent, 4.4 MOS",
+      "complexity": "Very high",
+      "use": "VoLTE / VoNR"
+    }
+  ],
+  "volte": {
+    "payload_bytes": 30.5,
+    "hdr_bytes": 46,
+    "hdr_rohc_bytes": 9,
+    "wire_kbps": 30.6,
+    "wire_rohc_kbps": 15.8,
+    "overhead_pct": 150.8,
+    "overhead_rohc_pct": 29.5,
+    "efficiency": 77.2,
+    "per_20ms_bits": 612.0
+  },
+  "handoff": {
+    "a": {
+      "H": 3.0,
+      "ttt": 0.0,
+      "n": 21,
+      "ping": 13,
+      "degraded": 1.56,
+      "outage": 0.0,
+      "worst": -90.1,
+      "rsrp_at_ho": -72.4,
+      "t_ho": 153.6
+    },
+    "b": {
+      "H": 6.0,
+      "ttt": 1.0,
+      "n": 5,
+      "ping": 0,
+      "degraded": 2.93,
+      "outage": 0.0,
+      "worst": -94.4,
+      "rsrp_at_ho": -73.2,
+      "t_ho": 171.0
+    },
+    "thresholds": {
+      "deg": -85.0,
+      "out": -100.0,
+      "eirp_ref": 35.5
+    },
+    "stats": [
+      {
+        "H": 2.0,
+        "ttt": 0.0,
+        "n_mean": 31.97,
+        "n_p95": 48.1,
+        "ping_mean": 23.23,
+        "degraded_mean": 3.24,
+        "outage_mean": 0.01,
+        "rsrp_at_ho_mean": -76.5
+      },
+      {
+        "H": 3.0,
+        "ttt": 0.5,
+        "n_mean": 9.17,
+        "n_p95": 15.0,
+        "ping_mean": 3.0,
+        "degraded_mean": 4.13,
+        "outage_mean": 0.02,
+        "rsrp_at_ho_mean": -76.1
+      },
+      {
+        "H": 4.0,
+        "ttt": 1.0,
+        "n_mean": 5.93,
+        "n_p95": 10.1,
+        "ping_mean": 1.3,
+        "degraded_mean": 4.62,
+        "outage_mean": 0.03,
+        "rsrp_at_ho_mean": -74.8
+      },
+      {
+        "H": 6.0,
+        "ttt": 1.0,
+        "n_mean": 4.47,
+        "n_p95": 7.0,
+        "ping_mean": 0.7,
+        "degraded_mean": 4.82,
+        "outage_mean": 0.03,
+        "rsrp_at_ho_mean": -71.8
+      },
+      {
+        "H": 9.0,
+        "ttt": 2.0,
+        "n_mean": 1.67,
+        "n_p95": 3.0,
+        "ping_mean": 0.03,
+        "degraded_mean": 5.69,
+        "outage_mean": 0.04,
+        "rsrp_at_ho_mean": -69.7
+      }
+    ]
+  },
+  "budget": {
+    "plan": [
+      {
+        "id": "U1",
+        "group": "RAN - urban",
+        "qty": 2,
+        "bucket": 6000000,
+        "item": "Three-sector macro base station, 900 + 1800 MHz, 10 MHz per carrier",
+        "spec": "2 x RRU + baseband; 43 dBm/carrier; 3 x 20 Mbit/s per sector after overhead; 2x2 MIMO; eCPRI to baseband; LTE FDD",
+        "why": "Puts both licensed carriers on one mast: 900 MHz carries coverage, 1800 MHz carries capacity, from the same civil works.",
+        "links": [
+          [
+            "Nokia AirScale radio access (RRH + baseband family)",
+            "https://www.nokia.com/networks/mobile-networks/airscale-radio-access/"
+          ],
+          [
+            "Nokia AirScale remote radio heads",
+            "https://www.nokia.com/networks/mobile-networks/airscale-radio-access/airscale-remote-radio-heads/"
+          ],
+          [
+            "Nokia AirScale baseband",
+            "https://www.nokia.com/networks/mobile-networks/airscale-radio-access/airscale-baseband/"
+          ],
+          [
+            "3GPP TS 36.104 - BS radio transmission and reception",
+            "https://www.3gpp.org/ftp/Specs/archive/36_series/36.104/"
+          ]
+        ]
+      },
+      {
+        "id": "U2",
+        "group": "RAN - urban",
+        "qty": 2,
+        "bucket": null,
+        "item": "Sector antennas: dual-band 900/1800 MHz, 65 deg HPBW, 16/18 dBi, RET",
+        "spec": "3 panels per site; 65 deg horizontal; cross-polarised 2x2 MIMO; remote electrical tilt",
+        "why": "65 deg panels form the three 120 deg sectors drawn on the layout; the 16 dBi (900) / 18 dBi (1800) values feed directly into the link budgets.",
+        "links": [
+          [
+            "CommScope base station antennas",
+            "https://www.commscope.com/"
+          ],
+          [
+            "Kathrein antenna systems",
+            "https://www.kathrein.com/"
+          ],
+          [
+            "Amphenol Procom antennas",
+            "https://www.amphenolprocom.com/"
+          ],
+          [
+            "RF Wel antenna catalogue",
+            "https://www.rfwel.com/"
+          ]
+        ]
+      },
+      {
+        "id": "R1",
+        "group": "RAN - rural",
+        "qty": 2,
+        "bucket": 6000000,
+        "item": "Rural three-sector macro site, 900 MHz only, high-gain panels",
+        "spec": "43 dBm/carrier into 18 dBi panels; 3 x 20 Mbit/s per sector; 45 m lattice tower",
+        "why": "At n = 3.0 the 900 MHz budget closes a 2.5 km cell; a second carrier would buy capacity the 50-user village cluster never uses.",
+        "links": [
+          [
+            "Nokia AirScale macro radio access",
+            "https://www.nokia.com/mobile-networks/ran/macro/"
+          ],
+          [
+            "Huawei RuralStar - low-power rural coverage",
+            "https://www.huawei.com/en/tech4all/stories/ruralstar"
+          ],
+          [
+            "Huawei RuralStar Pro launch",
+            "https://www.huawei.com/en/news/2020/2/huawei-ruralstar-pro-solution"
+          ],
+          [
+            "Baicells LTE portfolio",
+            "https://www.baicells.com/products/"
+          ]
+        ]
+      },
+      {
+        "id": "S1",
+        "group": "Indoor / emergency",
+        "qty": 2,
+        "bucket": 1000000,
+        "item": "Indoor small cells: hospital (urban Site 1) + rural clinic (Site 2)",
+        "spec": "900 MHz, 1 W, 20 MHz; PoE; 2 x 100 Mbit/s backhaul; SON neighbour discovery; donor-fed indoor antenna",
+        "why": "Removes the 12 dB penetration loss from the macro budget inside the two protected buildings. Both units are co-sited and fed from their host site's DC plant, so the hospital inherits 8 h and the clinic inherits 24 h ride-through with no extra battery line.",
+        "links": [
+          [
+            "Nokia small cells",
+            "https://www.nokia.com/mobile-networks/ran/small-cells/"
+          ],
+          [
+            "Baicells small cells",
+            "https://www.baicells.com/products/"
+          ],
+          [
+            "Parallel Wireless small cells",
+            "https://www.parallelwireless.com/products/"
+          ]
+        ]
+      },
+      {
+        "id": "B1",
+        "group": "Backhaul",
+        "qty": 6,
+        "bucket": null,
+        "item": "Backhaul transport, 1 Gbit/s per site (included in site price)",
+        "spec": "Licensed 18/23 GHz microwave for rural 3 km hops; GPON fibre where duct exists; 1 Gbit/s Ethernet demarcation",
+        "why": "Busy-hour demand is 60 Mbit/s urban and 5 Mbit/s rural, so 1 Gbit/s per site leaves a 16x margin and backhaul load stays at 3.0% - never the binding constraint.",
+        "links": [
+          [
+            "Ceragon IP-20N microwave backhaul",
+            "https://www.ceragon.com/products/ip-20n"
+          ],
+          [
+            "Ceragon wireless backhaul portfolio",
+            "https://www.ceragon.com/products"
+          ],
+          [
+            "Cambium Networks backhaul",
+            "https://www.cambiumnetworks.com/products/backhaul/"
+          ],
+          [
+            "Aviat Networks microwave",
+            "https://aviatnetworks.com/products/"
+          ],
+          [
+            "Ubiquiti airFiber (unlicensed fallback)",
+            "https://store.ui.com/collections/operator-airfiber"
+          ]
+        ]
+      },
+      {
+        "id": "P1",
+        "group": "Power",
+        "qty": 2,
+        "bucket": 400000,
+        "item": "8-hour DC backup: 48 V LiFePO4 + rectifier (2 urban macro sites)",
+        "spec": "48 V 200 Ah LiFePO4 (~9.6 kWh usable), 3 kW rectifier shelf, sized for ~1.1 kW site load including the hospital small cell",
+        "why": "9.6 kWh against a 1.1 kW load gives 8.7 h at end of life, meeting the 8 h urban outage with ageing margin; the hospital small cell shares this plant.",
+        "links": [
+          [
+            "Green Cubes telecom battery units",
+            "https://greencubes.com/industries/telecom/"
+          ],
+          [
+            "PylonTech LiFePO4 products",
+            "https://www.pylontech.com.cn/products/"
+          ],
+          [
+            "Victron LiFePO4 batteries",
+            "https://www.victronenergy.com/batteries"
+          ],
+          [
+            "Vertiv DC power systems",
+            "https://www.vertiv.com/en-us/products-catalog/critical-power/dc-power-systems/"
+          ]
+        ]
+      },
+      {
+        "id": "P2",
+        "group": "Power",
+        "qty": 2,
+        "bucket": 1000000,
+        "item": "24-hour backup: 48 V LiFePO4 + solar hybrid (2 rural macro sites)",
+        "spec": "48 V 400 Ah LiFePO4 (~19 kWh usable) + 1.6 kWp PV + MPPT + 3 kVA MultiPlus charger/inverter",
+        "why": "24 h at ~0.5 kW rural load needs 12 kWh; 19 kWh plus daily solar recharge rides through a multi-day flood outage and also protects the clinic small cell.",
+        "links": [
+          [
+            "Victron MultiPlus-II inverter/charger",
+            "https://www.victronenergy.com/inverters-chargers/multiplus-ii"
+          ],
+          [
+            "Victron MPPT solar charge controllers",
+            "https://www.victronenergy.com/solar-charge-controllers"
+          ],
+          [
+            "Green Cubes telecom DC backup",
+            "https://greencubes.com/industries/telecom/"
+          ],
+          [
+            "Vertiv DC power systems",
+            "https://www.vertiv.com/en-us/products-catalog/critical-power/dc-power-systems/"
+          ]
+        ]
+      },
+      {
+        "id": "C1",
+        "group": "Passive / civil",
+        "qty": 4,
+        "bucket": null,
+        "item": "Tower, shelter, earthing, lightning protection (included in site price)",
+        "spec": "30 m urban / 45 m rural lattice; RRU at mast head so feeder loss is 0.5 dB; Type-1 + Type-2 SPD; TN-S earthing < 5 ohm",
+        "why": "Mast-head RRU is why the link budget uses 0.5 dB feeder loss instead of the 3-4 dB a ground-level radio room would cost.",
+        "links": [
+          [
+            "3GPP TS 36.942 - RF system scenarios and link budget",
+            "https://www.3gpp.org/ftp/Specs/archive/36_series/36.942/"
+          ],
+          [
+            "ITU-R P.837 - rainfall for microwave availability",
+            "https://www.itu.int/rec/R-REC-P.837/en"
+          ],
+          [
+            "ITU-R P.526 - diffraction over terrain",
+            "https://www.itu.int/rec/R-REC-P.526/en"
+          ]
+        ]
+      }
+    ],
+    "buckets": {
+      "6000000": 4,
+      "1000000": 4,
+      "400000": 2
+    },
+    "total": 28800000,
+    "remaining": 1200000.0,
+    "contingency": 2880000.0,
+    "total_with_cont": 31680000.0,
+    "over_with_cont": 1680000.0,
+    "phase2": [
+      [
+        "Third urban macro site (capacity + N+1 redundancy)",
+        1,
+        6000000
+      ],
+      [
+        "8-hour battery backup for the new site",
+        1,
+        400000
+      ]
+    ],
+    "phase2_total": 6400000,
+    "alt_b_total": 35200000,
+    "shortfall": 5200000.0,
+    "cap": 30000000.0,
+    "unit": {
+      "MACRO": 6000000,
+      "SMALL": 1000000,
+      "BK8": 400000,
+      "BK24": 1000000
+    }
+  },
+  "targets": [
+    [
+      "T1",
+      "Outdoor coverage >= 95% of residents",
+      ">= 95%",
+      "99.0% urban / 97.8% rural",
+      "PASS",
+      "Monte-Carlo prediction, then drive test: RSRP >= -95 dBm in 200 m bins"
+    ],
+    [
+      "T2",
+      "Busy-hour data demand supported",
+      "load <= 70%",
+      "37.5% urban / 12.5% rural",
+      "PASS",
+      "OSS busy-hour PRB utilisation per sector < 70%"
+    ],
+    [
+      "T3",
+      "Voice blocking < 2%",
+      "< 2%",
+      "1.993% urban / 1.869% rural",
+      "PASS",
+      "Erlang-B design plus measured call-block counter"
+    ],
+    [
+      "T4",
+      "Hospital protected for 8 h outage",
+      "service held",
+      "small cell + 8 h battery",
+      "PASS",
+      "On-site 8 h discharge test with live traffic"
+    ],
+    [
+      "T5",
+      "Clinic protected for 24 h outage",
+      "service held",
+      "small cell + 24 h battery/solar",
+      "PASS",
+      "24 h discharge + 72 h solar recharge test"
+    ],
+    [
+      "T6",
+      "Capital cost <= BDT 30.0 M",
+      "<= 30.0 M",
+      "BDT 28.8 M",
+      "PASS",
+      "Costed bill of materials below"
+    ],
+    [
+      "T7",
+      "Single site failure tolerated",
+      "service continues",
+      "75.0% load on survivor",
+      "PASS",
+      "N+1 capacity audit"
+    ],
+    [
+      "T8",
+      "+50% traffic growth absorbed",
+      "load <= 100%",
+      "56.2% urban / 18.7% rural",
+      "PASS",
+      "Growth model re-run"
+    ]
+  ],
+  "deploy": {
+    "urban": 2,
+    "rural": 2
+  },
+  "carriers": {
+    "urban": [
+      900,
+      1800
+    ],
+    "rural": [
+      900
+    ]
+  },
+  "hardware": [
+    {
+      "id": "U1",
+      "group": "RAN - urban",
+      "qty": 2,
+      "bucket": 6000000,
+      "item": "Three-sector macro base station, 900 + 1800 MHz, 10 MHz per carrier",
+      "spec": "2 x RRU + baseband; 43 dBm/carrier; 3 x 20 Mbit/s per sector after overhead; 2x2 MIMO; eCPRI to baseband; LTE FDD",
+      "why": "Puts both licensed carriers on one mast: 900 MHz carries coverage, 1800 MHz carries capacity, from the same civil works.",
+      "links": [
+        [
+          "Nokia AirScale radio access (RRH + baseband family)",
+          "https://www.nokia.com/networks/mobile-networks/airscale-radio-access/"
+        ],
+        [
+          "Nokia AirScale remote radio heads",
+          "https://www.nokia.com/networks/mobile-networks/airscale-radio-access/airscale-remote-radio-heads/"
+        ],
+        [
+          "Nokia AirScale baseband",
+          "https://www.nokia.com/networks/mobile-networks/airscale-radio-access/airscale-baseband/"
+        ],
+        [
+          "3GPP TS 36.104 - BS radio transmission and reception",
+          "https://www.3gpp.org/ftp/Specs/archive/36_series/36.104/"
+        ]
+      ]
+    },
+    {
+      "id": "U2",
+      "group": "RAN - urban",
+      "qty": 2,
+      "bucket": null,
+      "item": "Sector antennas: dual-band 900/1800 MHz, 65 deg HPBW, 16/18 dBi, RET",
+      "spec": "3 panels per site; 65 deg horizontal; cross-polarised 2x2 MIMO; remote electrical tilt",
+      "why": "65 deg panels form the three 120 deg sectors drawn on the layout; the 16 dBi (900) / 18 dBi (1800) values feed directly into the link budgets.",
+      "links": [
+        [
+          "CommScope base station antennas",
+          "https://www.commscope.com/"
+        ],
+        [
+          "Kathrein antenna systems",
+          "https://www.kathrein.com/"
+        ],
+        [
+          "Amphenol Procom antennas",
+          "https://www.amphenolprocom.com/"
+        ],
+        [
+          "RF Wel antenna catalogue",
+          "https://www.rfwel.com/"
+        ]
+      ]
+    },
+    {
+      "id": "R1",
+      "group": "RAN - rural",
+      "qty": 2,
+      "bucket": 6000000,
+      "item": "Rural three-sector macro site, 900 MHz only, high-gain panels",
+      "spec": "43 dBm/carrier into 18 dBi panels; 3 x 20 Mbit/s per sector; 45 m lattice tower",
+      "why": "At n = 3.0 the 900 MHz budget closes a 2.5 km cell; a second carrier would buy capacity the 50-user village cluster never uses.",
+      "links": [
+        [
+          "Nokia AirScale macro radio access",
+          "https://www.nokia.com/mobile-networks/ran/macro/"
+        ],
+        [
+          "Huawei RuralStar - low-power rural coverage",
+          "https://www.huawei.com/en/tech4all/stories/ruralstar"
+        ],
+        [
+          "Huawei RuralStar Pro launch",
+          "https://www.huawei.com/en/news/2020/2/huawei-ruralstar-pro-solution"
+        ],
+        [
+          "Baicells LTE portfolio",
+          "https://www.baicells.com/products/"
+        ]
+      ]
+    },
+    {
+      "id": "S1",
+      "group": "Indoor / emergency",
+      "qty": 2,
+      "bucket": 1000000,
+      "item": "Indoor small cells: hospital (urban Site 1) + rural clinic (Site 2)",
+      "spec": "900 MHz, 1 W, 20 MHz; PoE; 2 x 100 Mbit/s backhaul; SON neighbour discovery; donor-fed indoor antenna",
+      "why": "Removes the 12 dB penetration loss from the macro budget inside the two protected buildings. Both units are co-sited and fed from their host site's DC plant, so the hospital inherits 8 h and the clinic inherits 24 h ride-through with no extra battery line.",
+      "links": [
+        [
+          "Nokia small cells",
+          "https://www.nokia.com/mobile-networks/ran/small-cells/"
+        ],
+        [
+          "Baicells small cells",
+          "https://www.baicells.com/products/"
+        ],
+        [
+          "Parallel Wireless small cells",
+          "https://www.parallelwireless.com/products/"
+        ]
+      ]
+    },
+    {
+      "id": "B1",
+      "group": "Backhaul",
+      "qty": 6,
+      "bucket": null,
+      "item": "Backhaul transport, 1 Gbit/s per site (included in site price)",
+      "spec": "Licensed 18/23 GHz microwave for rural 3 km hops; GPON fibre where duct exists; 1 Gbit/s Ethernet demarcation",
+      "why": "Busy-hour demand is 60 Mbit/s urban and 5 Mbit/s rural, so 1 Gbit/s per site leaves a 16x margin and backhaul load stays at 3.0% - never the binding constraint.",
+      "links": [
+        [
+          "Ceragon IP-20N microwave backhaul",
+          "https://www.ceragon.com/products/ip-20n"
+        ],
+        [
+          "Ceragon wireless backhaul portfolio",
+          "https://www.ceragon.com/products"
+        ],
+        [
+          "Cambium Networks backhaul",
+          "https://www.cambiumnetworks.com/products/backhaul/"
+        ],
+        [
+          "Aviat Networks microwave",
+          "https://aviatnetworks.com/products/"
+        ],
+        [
+          "Ubiquiti airFiber (unlicensed fallback)",
+          "https://store.ui.com/collections/operator-airfiber"
+        ]
+      ]
+    },
+    {
+      "id": "P1",
+      "group": "Power",
+      "qty": 2,
+      "bucket": 400000,
+      "item": "8-hour DC backup: 48 V LiFePO4 + rectifier (2 urban macro sites)",
+      "spec": "48 V 200 Ah LiFePO4 (~9.6 kWh usable), 3 kW rectifier shelf, sized for ~1.1 kW site load including the hospital small cell",
+      "why": "9.6 kWh against a 1.1 kW load gives 8.7 h at end of life, meeting the 8 h urban outage with ageing margin; the hospital small cell shares this plant.",
+      "links": [
+        [
+          "Green Cubes telecom battery units",
+          "https://greencubes.com/industries/telecom/"
+        ],
+        [
+          "PylonTech LiFePO4 products",
+          "https://www.pylontech.com.cn/products/"
+        ],
+        [
+          "Victron LiFePO4 batteries",
+          "https://www.victronenergy.com/batteries"
+        ],
+        [
+          "Vertiv DC power systems",
+          "https://www.vertiv.com/en-us/products-catalog/critical-power/dc-power-systems/"
+        ]
+      ]
+    },
+    {
+      "id": "P2",
+      "group": "Power",
+      "qty": 2,
+      "bucket": 1000000,
+      "item": "24-hour backup: 48 V LiFePO4 + solar hybrid (2 rural macro sites)",
+      "spec": "48 V 400 Ah LiFePO4 (~19 kWh usable) + 1.6 kWp PV + MPPT + 3 kVA MultiPlus charger/inverter",
+      "why": "24 h at ~0.5 kW rural load needs 12 kWh; 19 kWh plus daily solar recharge rides through a multi-day flood outage and also protects the clinic small cell.",
+      "links": [
+        [
+          "Victron MultiPlus-II inverter/charger",
+          "https://www.victronenergy.com/inverters-chargers/multiplus-ii"
+        ],
+        [
+          "Victron MPPT solar charge controllers",
+          "https://www.victronenergy.com/solar-charge-controllers"
+        ],
+        [
+          "Green Cubes telecom DC backup",
+          "https://greencubes.com/industries/telecom/"
+        ],
+        [
+          "Vertiv DC power systems",
+          "https://www.vertiv.com/en-us/products-catalog/critical-power/dc-power-systems/"
+        ]
+      ]
+    },
+    {
+      "id": "C1",
+      "group": "Passive / civil",
+      "qty": 4,
+      "bucket": null,
+      "item": "Tower, shelter, earthing, lightning protection (included in site price)",
+      "spec": "30 m urban / 45 m rural lattice; RRU at mast head so feeder loss is 0.5 dB; Type-1 + Type-2 SPD; TN-S earthing < 5 ohm",
+      "why": "Mast-head RRU is why the link budget uses 0.5 dB feeder loss instead of the 3-4 dB a ground-level radio room would cost.",
+      "links": [
+        [
+          "3GPP TS 36.942 - RF system scenarios and link budget",
+          "https://www.3gpp.org/ftp/Specs/archive/36_series/36.942/"
+        ],
+        [
+          "ITU-R P.837 - rainfall for microwave availability",
+          "https://www.itu.int/rec/R-REC-P.837/en"
+        ],
+        [
+          "ITU-R P.526 - diffraction over terrain",
+          "https://www.itu.int/rec/R-REC-P.526/en"
+        ]
+      ]
+    }
+  ],
+  "software": [
+    {
+      "item": "Propagation planning and field validation",
+      "why": "Confirms the log-distance prediction against terrain and clutter before capex.",
+      "links": [
+        [
+          "ITU-R P.1546 - point-to-area prediction",
+          "https://www.itu.int/rec/R-REC-P.1546/en"
+        ],
+        [
+          "ITU-R P.2109 - building entry loss (indoor margin)",
+          "https://www.itu.int/rec/R-REC-P.2109/en"
+        ]
+      ]
+    },
+    {
+      "item": "Erlang-B dimensioning",
+      "why": "Turns 200 E of offered voice into 214 channels at 2% blocking.",
+      "links": [
+        [
+          "Westbay Erlang-B calculator",
+          "https://www.erlang.com/calculator/erlb/"
+        ],
+        [
+          "Erlang unit reference",
+          "https://en.wikipedia.org/wiki/Erlang_(unit)"
+        ]
+      ]
+    },
+    {
+      "item": "BER and handover simulation (this report)",
+      "why": "Reproduces the Q-function curves, then adds carrier/timing error and handover traces.",
+      "links": [
+        [
+          "MathWorks BERAWGN reference",
+          "https://www.mathworks.com/help/comm/ref/berawgn.html"
+        ],
+        [
+          "NumPy",
+          "https://numpy.org/"
+        ],
+        [
+          "SciPy",
+          "https://scipy.org/"
+        ],
+        [
+          "Matplotlib",
+          "https://matplotlib.org/"
+        ]
+      ]
+    }
+  ]
+}

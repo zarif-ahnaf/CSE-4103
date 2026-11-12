@@ -1,0 +1,1158 @@
+\documentclass[9pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1.25cm,top=1.75cm,bottom=1.35cm,headheight=12pt,headsep=7pt,footskip=12pt]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{multicol}
+
+
+\hypersetup{hidelinks,pdftitle={Cellular Network Design in Bangladesh},
+            pdfauthor={CSE-4103 Case Study}}
+
+\captionsetup{font=footnotesize,labelfont=bf,skip=3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1.5pt}
+\renewcommand{\arraystretch}{1.05}
+
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{0.6em}{}
+\titlespacing{\section}{0pt}{7pt}{3pt}
+\titlespacing{\subsection}{0pt}{5pt}{2pt}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\footnotesize CSE-4103 Cellular and Wireless Communication}
+\fancyhead[R]{\footnotesize BAUET, Summer 2026}
+\fancyfoot[C]{\footnotesize\thepage}
+\fancyfoot[R]{\scriptsize Case study: Cellular Network Design in Bangladesh}
+
+% Link labels must be breakable: \nolinkurl breaks at / . - _ and is coloured.
+\Urlmuskip=0mu plus 1mu\relax
+\setlength{\emergencystretch}{2em}
+\newcommand{\ulinkurl}[1]{#1}
+\newcommand{\key}[1]{\textbf{#1}}
+\newcommand{\keym}[1]{\mathbf{#1}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Cellular Network Design in Bangladesh}\\[3pt]
+{\large A costed urban-rural plan for Dhaka and Kurigram under one BDT 30 million budget}\\[8pt]
+{\normalsize Case Study, CSE-4103 Cellular and Wireless Communication}\\[2pt]
+{\small Bangladesh Army University of Engineering \& Technology (BAUET), Qadirabad, Natore}\\[2pt]
+{\small Department of Computer Science and Engineering $\cdot$ Summer 2026}
+\end{center}
+
+\vspace{-4pt}
+\begin{center}\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Urban site} & Dhaka, busy neighbourhood, 4 km$^2$, 10\,000 subscribers \\
+\textbf{Rural site} & Kurigram, flood-prone village cluster, 25 km$^2$, 2\,000 subscribers \\
+\textbf{Capital budget} & BDT 30.0 million, shared between both areas \\
+\textbf{Deliverable} & 7 design questions, calculation sheet, BER plots, costed BOM, compliance table \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Executive summary}
+
+The two areas fail for different physical reasons, so they need different remedies. The urban
+neighbourhood is \key{capacity- and interference-limited}: 300 simultaneous users at 0.2 Mbit/s
+demand 60 Mbit/s, and indoor users lose a further 12 dB of penetration loss. The rural cluster is
+\key{coverage- and energy-limited}: at $n=3.0$ a 900 MHz cell only reaches 2.5 km, and a
+24-hour flood outage outlasts any lead-acid battery.
+
+\begin{table}[H]\centering\small
+\caption{The recommended plan.}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+& \textbf{Urban (Dhaka)} & \textbf{Rural (Kurigram)} \\
+\midrule
+Carriers & 900 MHz (coverage) + 1800 MHz (capacity) & 900 MHz only \\
+Sites / design radius & 2 macros, $R=1579$ m & 2 macros, $R=2502$ m \\
+Outdoor coverage & 99.0\% & 97.8\% \\
+Busy-hour load & 37.5\% & 12.5\% \\
+Handover & $H=3$ dB, TTT $0.5$ s & $H=6$ dB, TTT $1$ s \\
+Codec & AMR-NB 12.2 kbit/s & AMR-NB 12.2 kbit/s \\
+Emergency power & 8 h LiFePO$_4$ + hospital small cell & 24 h LiFePO$_4$ + solar + clinic small cell \\
+\midrule
+\multicolumn{3}{@{}l}{\textbf{Capital cost: BDT 28.8 M of the BDT 30.0 M budget}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three findings deserve emphasis because they contradict the intuitive answer:
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{The downlink limits the cell, not the uplink}, by 2 dB: after the carrier is shared
+across users, both directions transmit at 23 dBm at the edge, but the handset's 7 dB noise figure
+is worse than the base station's 5 dB.
+\item \textbf{Adding towers is the wrong lever in the urban area.} A third site costs BDT 6 M and
+breaches the budget, yet two sites already run at 37.5\% load. Capacity comes from spectrum and
+sectorisation, not steel.
+\item \textbf{The 10\% contingency does not fit.} Hard cost is BDT 28.8 M, but with a prudent
+contingency it totals BDT 31.68 M, or \textbf{BDT 1.68 M over budget}. Section~\ref{sec:q7}
+quantifies this and stages the upgrade instead of pretending it fits.
+\end{enumerate}
+
+\section{Q1: Problem identification}
+\label{sec:q1}
+
+\subsection{Why the urban service is poor}
+Dhaka shows three symptoms: slow internet, weak indoor signal and dropped calls while moving.
+These are \emph{not} one fault. The likely causes, in order of contribution:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Capacity congestion.} 60 Mbit/s of busy-hour demand against a single 10 MHz carrier
+gives only $2.5\ \text{bit/s/Hz}\times10\ \text{MHz}=25$ Mbit/s per sector at best. If the
+operator runs one carrier and no sectorisation, demand exceeds supply, the scheduler starves
+users and latency rises. This is the dominant cause of ``slow internet''.
+\item \textbf{Indoor penetration loss.} Concrete walls cost 12 dB in this design. The indoor
+design radius is 717 m against an outdoor 1580 m (Table~\ref{tab:lb_indoor}), so more than half
+the outdoor footprint has no reliable indoor service. This is the dominant cause of ``weak
+indoor signal''.
+\item \textbf{Co-channel interference at the cell edge.} With $N=1$ reuse and $n=3.5$, the
+omni-directional first tier gives $C/I=0.6$ dB (Table~\ref{tab:reuse}), far below the 7 dB
+required. Edge users therefore see high block-error rates and dropped calls.
+\item \textbf{Missing or late handover.} A handset crossing a boundary at 50 km/h with no
+hysteresis ping-pongs; with excessive hysteresis it hands over too late. Both produce drops
+(Section~\ref{sec:q5}).
+\item \textbf{Backhaul, least likely here.} A modern macro site has 1 Gbit/s; busy-hour demand is
+60 Mbit/s. Backhaul sits at a 3\% load, so it is \emph{not} the bottleneck. Ruling it out matters,
+because upgrading it would waste money.
+\end{itemize}
+
+\subsection{Why the rural service is poor}
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Weak coverage over a large area.} 25 km$^2$ with a 2.5 km cell radius needs only
+about 1.5 sites in principle, but villages are spread unevenly, so a lattice plan reaching 95\%
+needs 2 sites at 97.8\% (Table~\ref{tab:sweep}); one site reaches only 94.9\% and misses the
+target by a hair.
+\item \textbf{Energy continuity during floods.} A 24-hour outage destroys a lead-acid battery
+that only holds 3-4 hours at practical depth of discharge. Once the site dies, so does the
+service. The failure is \emph{energetic}, not radio.
+\item \textbf{Low spectral efficiency at the edge.} At $n=3.0$ and $N=1$, omni $C/I$ is
+$-0.6$ dB, so cell-edge users cannot hold a high-order modulation.
+\end{itemize}
+
+\subsection{Measurements that separate the four faults}
+The diagnostic value comes from \emph{combining} counters, because each fault has a distinct
+signature. Table~\ref{tab:diag} gives the test that discriminates each case.
+
+\begin{table}[H]\centering\small
+\caption{Measurement plan: how each candidate cause is confirmed or excluded.}
+\label{tab:diag}
+\begin{tabularx}{\textwidth}{@{}p{2.35cm}p{3.6cm}Xp{3.35cm}@{}}
+\toprule
+\textbf{Suspected cause} & \textbf{Primary measurement} & \textbf{Discriminating signature} & \textbf{Excludes} \\
+\midrule
+Weak coverage & Drive-test RSRP and RSRQ in 200 m bins; per-floor indoor walk test & RSRP below $-95$ dBm with \emph{low} interference (RSRQ normal); worsens with distance & Congestion: a congested cell has good RSRP but poor throughput \\
+Interference & RSRQ, SINR, and uplink interference power per PRB from the OSS & Good RSRP but poor RSRQ/SINR; interference rises at the cell edge and at night from distant cells & Weak coverage: there RSRP is already poor \\
+Congestion & PRB utilisation, active users, throughput per user at busy hour & High PRB utilisation (above 70\%) with \emph{good} radio quality; queuing delay & Interference: PRB may be low while SINR is bad \\
+Backhaul limitation & Backhaul interface counters, Ethernet utilisation, latency and jitter to the core & Throughput capped at the same value on \emph{every} sector of a site regardless of radio quality & Everything else: radio counters look healthy \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Sequencing rule: \emph{radio first, transport second}. If all three sectors of one site show
+the same throughput ceiling, the fault is backhaul; if only edge sectors are bad, it is
+interference; if all sectors are fine but slow at 20:00, it is congestion.
+
+\subsection{Objectives, constraints and the three competing requirements}
+\paragraph{Design objectives.} (i) At least 95\% outdoor coverage at $-95$ dBm RSRP in each
+area. (ii) Busy-hour load at or below 70\%, for growth and one site failure. (iii) Voice blocking
+below 2\%. (iv) Hospital on air 8 h, clinic 24 h. (v) Within BDT 30.0 M.
+
+\paragraph{Constraints.} One 10 MHz downlink carrier at each of two bands plus matching uplink;
+43 dBm per carrier; 23 dBm handset; $n=3.5$ urban and $3.0$ rural (given); fixed unit costs
+(BDT 6.0 M macro, 1.0 M small cell, 0.4 M / 1.0 M backup).
+
+\paragraph{The three competing requirements.}
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Coverage against capacity.} Wider cells (higher power, lower reuse) cover more area
+per site but reduce the signal-to-interference ratio, which caps spectral efficiency. Our own
+numbers show this: $N=1$ gives three times the capacity of $N=3$ at the same bandwidth, but only
+5.3 dB of $C/I$ instead of 13.7 dB.
+\item \textbf{Capacity against cost and interference.} More sites or sectors raise capacity but
+add BDT 6 M each, add handovers (each a drop opportunity) and add co-channel interferers. This is
+exactly the ``more towers'' conflict the brief raises.
+\item \textbf{Continuity against cost.} A 24-hour backup costs 2.5 times an 8-hour one per site.
+Buying 24 h everywhere would cost BDT 5.9 M more and break the budget, so continuity has to be
+targeted at the clinic rather than spread uniformly.
+\end{enumerate}
+
+\section{Q2: Coverage calculation}
+\label{sec:q2}
+
+\subsection{Assumptions and their justification}
+Every value the assignment did not supply is listed with its justification in the calculation
+sheet (Table~\ref{tab:assume}); the figures quoted in the text refer to it.
+
+\paragraph{Deriving the 7 dB $C/N$ requirement.} This is the number most often simply asserted, so
+it is built from three parts. Uncoded QPSK needs $E_b/N_0=10.5$ dB for BER $=10^{-6}$ (from
+$Q(\sqrt{2E_b/N_0})$, confirmed by the Section~\ref{sec:q3} simulation and in line with the LTE
+base-station and handset requirements~\cite{ts36104,ts36101,rappaport}). At the cell edge the
+scheduler runs a conservative rate, $R_b/B=0.25$:
+\[
+10\log_{10}\!\left(\frac{C}{N}\right)_{\min}
+= \left.\frac{E_b}{N_0}\right|_{\text{dB}} + 10\log_{10}\!\frac{R_b}{B}
+= 10.5 - 6.0 = 4.5\ \text{dB}.
+\]
+Adding a 2.5 dB implementation margin for equaliser imperfection gives \key{7.0 dB}.
+
+\paragraph{Thermal noise.} $N=kTB+\text{NF}$~\cite{rappaport} with $k=1.381\times10^{-23}$ J/K, $T=290$ K,
+$B=10$ MHz:
+\[
+N_{\text{BS}} = -174 + 10\log_{10}(10^{7}) + 5 = -99.0\ \text{dBm},\qquad
+N_{\text{MS}} = -174 + 70 + 7 = -97.0\ \text{dBm}.
+\]
+
+\paragraph{Downlink power split.} A 10 MHz carrier serves many users at once, so crediting one
+user with the full 43 dBm is wrong and gives a fictitious 30 dB imbalance. We plan a fixed split
+$P_S=20$ dB: a 20 Mbit/s sector serving 100 concurrent 0.2 Mbit/s users implies about 20 dB of
+power sharing, so one edge user receives $43-20=23$ dBm, equal to the handset maximum, which
+makes the two directions comparable.
+
+\subsection{Link budgets}
+%%LINK_URBAN%%
+
+\paragraph{Which link limits coverage?} The \key{downlink} does, in every combination, by 2 dB.
+Both directions transmit at 23 dBm at the edge, but the handset's noise figure is 2 dB worse than
+the base station's, so the handset needs 2 dB more received power for the same $C/N$; downlink
+antenna gain (16 dBi) is partly cancelled by the handset's 3 dB body loss. This is a well-known
+asymmetry of handset-limited cellular links, and it is why uplink-only link budgets are
+optimistic.
+
+\paragraph{Indoor coverage.} The 12 dB urban penetration margin collapses the radius from
+1580 m to 717 m (Table~\ref{tab:lb_indoor} in the calculation sheet), which is why the hospital
+needs a dedicated small cell rather than relying on the outdoor macro.
+
+\subsection{Site count and layout}
+The propagation model is the log-distance law~\cite{rappaport}. A three-sector site serves one hexagonal cell of area $\frac{3\sqrt3}{2}R^2 = 2.598R^2$:
+
+\begin{center}\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+& $R$ & Cell area & Sites for the whole area \\
+\midrule
+Urban & 1580 m & 6.48 km$^2$ & $4.0/6.48 = 0.62$, i.e. the area is smaller than one cell \\
+Rural & 2502 m & 16.26 km$^2$ & $25.0/16.26 = 1.54$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Geometry alone therefore suggests 1 urban and 2 rural sites. But geometry is not the only
+criterion: the urban area must also carry 60 Mbit/s, and a single site must survive its failure.
+A Monte-Carlo check of 30\,000 random residents against the 90\%-reliability threshold confirms
+the choice (Table~\ref{tab:sweep}).
+
+\begin{table}[H]\centering\small
+\caption{Monte-Carlo coverage against site count (30\,000 random residents, 90\% reliability).}
+\label{tab:sweep}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{Urban (4 km$^2$)}} & \multicolumn{2}{c}{\textbf{Rural (25 km$^2$)}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Sites & outdoor & indoor & outdoor & indoor \\
+\midrule
+%%SWEEP%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Reading the sweep.} One urban site already gives 99.0\% outdoor coverage, because the
+4 km$^2$ area is smaller than a single 6.48 km$^2$ cell. We still build \key{two} urban sites, for
+two reasons the coverage table cannot show: capacity (60 Mbit/s needs two sites at 37.5\% load
+each) and survivability (a single site failure would otherwise wipe out the whole neighbourhood).
+Rural needs \key{two} sites to cross 95\%; one site reaches 94.9\% and misses the target.
+
+\begin{figure}[H]\centering
+\begin{subfigure}{0.455\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fig_coverage_urban.png}
+\caption{Urban: 2 macros, hospital marked}
+\end{subfigure}\hfill
+\begin{subfigure}{0.455\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fig_coverage_rural.png}
+\caption{Rural: 2 macros, clinic marked}
+\end{subfigure}
+\caption{Layout and coverage. Colour is the predicted 900 MHz path loss; the red dashed line is
+the 90\%-reliability outdoor boundary; tinted wedges are the three 120$^\circ$ sectors.}
+\label{fig:layout}
+\end{figure}
+
+\section{Q3: Fading and modulation}
+\label{sec:q3}
+
+\subsection{Doppler shift at 50 km/h}
+The maximum Doppler shift~\cite{rappaport} is $f_D = v f_c / c$ with $v = 50/3.6 = 13.89$ m/s:
+\begin{align*}
+f_{D,900}  &= \frac{13.89 \times 900\times10^{6}}{3\times10^{8}} = 41.67\ \text{Hz},\\
+f_{D,1800} &= \frac{13.89 \times 1800\times10^{6}}{3\times10^{8}} = 83.33\ \text{Hz}.
+\end{align*}
+The coherence time $T_c\approx0.423/f_D$ is 10.2 ms at 900 MHz and 5.1 ms at 1800 MHz,
+several 1 ms subframes, so the channel is \emph{slow} relative to the frame structure and
+pilot-based estimation every subframe tracks it comfortably. We therefore need no fast feedback
+loop, only the 2 dB margin for residual estimation error.
+
+\subsection{RMS delay spread}
+The RMS delay spread follows the standard moment formula~\cite{rappaport}. Normalising the given powers $[0,-3,-8]$ dB gives linear weights summing to
+$1.0+0.501+0.158=1.659$:
+
+\begin{center}\small
+\begin{tabular}{@{}cccc@{}}
+\toprule
+Delay $\tau$ ($\mu$s) & Power (dB) & Linear power & Normalised weight $p_i$ \\
+\midrule
+0 & 0 & 1.000 & 0.6025 \\
+1 & $-3$ & 0.501 & 0.3020 \\
+3 & $-8$ & 0.158 & 0.0955 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{align*}
+\bar\tau &= \textstyle\sum p_i\tau_i = 0.6025(0)+0.3020(1)+0.0955(3) = 0.5885\ \mu\text{s},\\
+\overline{\tau^2} &= \textstyle\sum p_i\tau_i^2 = 0.3020(1)+0.0955(9) = 1.1614\ \mu\text{s}^2,\\
+\sigma_\tau &= \sqrt{\overline{\tau^2}-\bar\tau^2}
+= \sqrt{1.1614-0.3463} = \keym{0.9029\ \mu\text{s}}.
+\end{align*}
+
+The coherence bandwidth~\cite{rappaport} is $B_c\approx1/(5\sigma_\tau)=221.5$ kHz at the 50\% correlation level
+and $1/(50\sigma_\tau)=22.2$ kHz at 90\%. The LTE subcarrier spacing is 15 kHz and the normal
+cyclic prefix is 4.7 $\mu$s, so the RMS spread of 0.90 $\mu$s sits \emph{inside} the cyclic
+prefix: ISI is absorbed by the CP and removed by the frequency-domain equaliser. It is not
+negligible, though: it is 0.19 of the CP length, which is why the equaliser and a 2 dB
+margin are both carried.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.34\textwidth]{figures/fig_delay.png}
+\caption{The given power-delay profile. The RMS delay spread of 0.90 $\mu$s fits inside the
+4.7 $\mu$s LTE cyclic prefix.}
+\label{fig:delay}
+\end{figure}
+
+\subsection{BER simulation versus theory}
+The simulation transmits $4\times10^{5}$ random bits per point through an AWGN channel and decides
+by sign. For QPSK the symbols are Gray-mapped and $E_s/N_0=2E_b/N_0$, so the per-information-bit
+error rate should coincide with BPSK, a property worth checking because a common simulation
+error double-counts the symbol energy and makes QPSK look 3 dB better than it is.
+Figure~\ref{fig:ber} shows agreement within Monte-Carlo scatter across the whole range.
+
+\begin{figure}[H]\centering
+\begin{subfigure}{0.475\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fig_ber.png}
+\caption{Simulation (markers) against theory (line).}
+\end{subfigure}\hfill
+\begin{subfigure}{0.37\textwidth}\centering
+\includegraphics[width=\textwidth]{figures/fig_impairments.png}
+\caption{Sensitivity at $E_b/N_0=10$ dB.}
+\end{subfigure}
+\caption{BPSK and QPSK in AWGN, and the effect of carrier-phase and symbol-timing error.}
+\label{fig:ber}
+\end{figure}
+
+At $E_b/N_0=6$ dB the theory~\cite{berawgn} gives $Q(\sqrt{3.981})=Q(1.995)\approx0.0230$, i.e. a 2.3\% BER, and
+the simulation lands on the same value. At 10 dB both fall to about $5\times10^{-6}$.
+
+\paragraph{Why QPSK is chosen over BPSK.} At the same $E_b/N_0$ the two have the same BER, but
+QPSK carries two bits per symbol, so it doubles spectral efficiency for free. BPSK would need
+twice the bandwidth for the same throughput. The only reason to prefer BPSK is a marginally
+simpler receiver, which is irrelevant at macro-cell scale.
+
+\subsection{Receiver errors and the design}
+The impairment sweep is the practically important part, because the theoretical curve assumes
+perfect synchronisation.
+
+\begin{table}[H]\centering\small
+\caption{QPSK BER at $E_b/N_0=10$ dB under carrier-phase and timing error (simulated).}
+\label{tab:impair}
+\begin{tabular}{@{}cccc@{}}
+\toprule
+Phase error ($^\circ$) & BER & Timing error (\% of $T_s$) & BER \\
+\midrule
+%%IMPAIR_PHASE%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three conclusions drive the design:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Carrier phase is the fragile quantity.} A 30$^\circ$ residual error raises BER from
+$5\times10^{-6}$ to about 2.5\%, a factor of 5000. The constellation has simply rotated into
+its neighbour's decision region. So the design must budget for carrier recovery (a Costas loop or
+pilot-aided tracking) and must not rely on absolute phase without pilots: this is precisely why
+LTE carries cell-specific reference signals in every subframe.
+\item \textbf{Timing error is more forgiving but not free.} Half a symbol of timing error
+degrades BER to roughly 25\%, because the matched filter samples the zero-crossing instead of the
+peak. Timing recovery (Gardner or early-late gate) is therefore mandatory, but a tenth of a
+symbol costs little, which tells us the tracking loop need only be moderately tight.
+\item \textbf{Design response.} Section~\ref{sec:q5} sets handover hysteresis and TTT so that
+re-synchronisation happens while the signal is still strong; Section~\ref{sec:q6} chooses a codec
+whose robustness lets us spend the remaining link margin on synchronisation rather than raw power.
+Concretely: hold $E_b/N_0$ near 10 dB at the cell edge and keep residual phase error below
+10$^\circ$.
+\end{itemize}
+
+\section{Q4: Interference control and capacity planning}
+\label{sec:q4}
+
+\subsection{Reuse factor and co-channel interference}
+With $D/R=\sqrt{3N}$ and the first-tier approximation
+$\frac{C}{I}=\frac{1}{i_0}\left(\frac{D}{R}\right)^{n}$, the reuse ratio is
+$\sqrt{3}=1.732$ at $N=1$ and $\sqrt{9}=3.000$ at $N=3$.
+
+\begin{table}[H]\centering\small
+\caption{Estimated co-channel $C/I$ for the two reuse factors, with $i_0$ dominant interferers.}
+\label{tab:reuse}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Area} & $N$ & $D/R$ & \textbf{Omni} ($i_0=6$) & \textbf{3-sector} ($i_0=2$) & \textbf{6-sector} ($i_0=1$) \\
+\midrule
+%%REUSE%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Interpretation.} For $N=1$ and $n=3.5$ the omni $C/I$ is only 0.57 dB; the system is
+interference-limited to the point of being unusable without sectorisation or fractional reuse.
+Sectorising to three sectors per site raises it to 5.34 dB, because the directional antenna
+rejects two-thirds of the interferers ($i_0$ falls from 6 to 2). Moving to $N=3$ almost doubles
+$D/R$ and lifts the omni figure to 8.92 dB, comfortably above the 7 dB requirement. Rural, with
+the gentler $n=3.0$, is worse at $N=1$ ($-0.62$ dB), a useful warning that a ``rural is
+easier'' assumption is false for interference, because the slower decay means distant interferers
+hurt more.
+
+\paragraph{The trade-off in capacity terms.} $N=3$ triples the reuse distance but divides the
+available spectrum by three. On one 10 MHz carrier:
+
+\begin{center}\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+& $N=1$ & $N=3$ \\
+\midrule
+Spectrum per cell & 10 MHz & 3.33 MHz \\
+Spectral efficiency achievable at that $C/I$ & 2.5 bit/s/Hz & 2.5 bit/s/Hz \\
+Capacity per sector & 20.0 Mbit/s & 6.67 Mbit/s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+So $N=1$ gives three times the capacity \emph{provided} interference is controlled another way.
+This is exactly what LTE does: $N=1$ on the 1800 MHz capacity layer, with sectorisation and a
+2 dB interference margin, and a logical $N=3$ split of the 900 MHz coverage layer.
+
+\subsection{Adjacent-channel interference}
+Co-channel interference is controlled by \emph{geometry} (reuse distance, antenna pattern), but
+adjacent-channel interference is a \emph{filtering and linearity} problem, so it needs different
+remedies and does not improve simply by moving cells further apart:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item Keep a guard band between the two 10 MHz carriers and use a transmit mask with shoulders
+steeper than the 3GPP TS 36.104 general-purpose mask~\cite{ts36104}; a spectrum-analyser sweep of the RRU is the
+acceptance test.
+\item Prevent strong local signals from overloading the receiver: a handset 2 m from a small cell
+can saturate the LNA and splatter into adjacent channels. The small cells here use 1 W and a
+minimum coupling-loss assumption rather than 43 dBm.
+\item Aim the sector antennas' back lobes away from the neighbouring carrier's coverage: the
+65$^\circ$ panels have front-to-back ratios better than 25 dB, which is what keeps ACI out of
+edge users.
+\end{itemize}
+
+\subsection{Busy-hour demand and usable capacity}
+Demand is given directly: $300\times0.2=60$ Mbit/s urban and $50\times0.1=5$ Mbit/s rural.
+
+Usable capacity per sector uses a \emph{justified} spectral efficiency of 2.5 bit/s/Hz: what a
+10 MHz FDD carrier with 2$\times$2 MIMO and 64-QAM, averaged over the cell (edge users on QPSK,
+centre users on 64-QAM), realistically delivers; it is below the theoretical 6 bit/s/Hz for
+64-QAM because of pilot and control overhead. Removing 20\% for control channels, reference
+signals and guard bands:
+\[
+C_{\text{sector}} = \underbrace{10\ \text{MHz}\times2.5\ \text{bit/s/Hz}}_{25.0\ \text{Mbit/s}}
+\times(1-0.20) = 20.0\ \text{Mbit/s}.
+\]
+
+\begin{table}[H]\centering\small
+\caption{Capacity against demand. Backhaul is 1 Gbit/s per site.}
+\label{tab:cap}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+\textbf{Area} & \textbf{Sites} & \textbf{Carriers} & \textbf{Per site} & \textbf{Total} &
+\textbf{Demand} & \textbf{Load} & \textbf{Backhaul} \\
+& & & Mbit/s & Mbit/s & Mbit/s & (\%) & load (\%) \\
+\midrule
+%%CAPACITY%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Backhaul is not the limit.} Total demand is 60 Mbit/s urban against 2 Gbit/s of
+backhaul across two sites: a 3.0\% load. The binding constraints are radio capacity and coverage,
+which is why the backhaul line sits inside the site price and needs no upgrade.
+
+\subsection{Sectoring, cell splitting and small cells compared}
+\begin{table}[H]\centering\small
+\caption{Three ways to add capacity, compared for this network.}
+\begin{tabularx}{\textwidth}{@{}p{2.4cm}XXX@{}}
+\toprule
+& \textbf{Sectoring} & \textbf{Cell splitting} & \textbf{Small cells} \\
+\midrule
+Mechanism & three 65$^\circ$ panels per site instead of omni & more sites at smaller $R$ & low-power nodes under macro coverage \\
+Capacity gain & about 3 times per site; $C/I$ rises 4.8 dB urban & capacity per area scales as $1/R^2$ & large locally, only where deployed \\
+Cost & low: antennas on an existing mast & high: a whole BDT 6 M site each & lowest: BDT 1 M per node \\
+Interference cost & lower ($i_0$: 6 to 2) & higher: more reuse cells closer together & needs careful indoor/outdoor coordination \\
+Handovers & unchanged & increases, each a drop opportunity & many, between layers \\
+Best for & both areas, already adopted & growth beyond the budget & the hospital and clinic exactly \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Selection.} \key{Urban: sectoring plus the 1800 MHz $N=1$ capacity layer, with small
+cells reserved for the hospital.} Sectoring is nearly free and already gives the 4.8 dB of $C/I$
+needed to make $N=1$ viable; the 1800 MHz carrier triples per-site capacity to 80 Mbit/s.
+\key{Rural: sectoring plus the 900 MHz coverage layer, no small cells outside the clinic.}
+Splitting rural cells would waste money: two sites already run at 12.5\% load, so more capacity is
+not the problem; reach is, and that is bought with tower height and the 900 MHz band, not with
+more sites.
+
+\section{Q5: Handover improvement}
+\label{sec:q5}
+
+\subsection{The model}
+A handset drives at 50 km/h~\cite{handover} (13.89 m/s) from inside site A, across the boundary midway between
+the two sites, into site B. Site separation is $2R=3.16$ km, so the midpoint of the route is
+exactly the boundary. Every 10 ms the simulator evaluates
+\[
+P_r(d) = \underbrace{P_t+G_t+G_r-L_{\text{body}}}_{EIRP=35.5\ \text{dBm}}
+-\left[PL(d_0)+10n\log_{10}\frac{d}{d_0}\right] + X_\sigma + F,
+\]
+with correlated log-normal shadowing $X_\sigma$ ($\sigma=8$ dB, 50 m decorrelation) and a
+Jakes-sum Rayleigh term $F$ at $f_D=41.67$ Hz. A 200 ms measurement window averages the fast
+fading, matching how a handset actually reports. The handover rule is the one from the course
+notes:
+\[
+P_{\text{target}} > P_{\text{serving}} + H \quad\text{sustained for the time-to-trigger (TTT)}.
+\]
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.60\textwidth]{figures/fig_handoff.png}
+\caption{Received-signal traces for the two settings. The black line is the serving-cell level.
+(a) $H=3$ dB, no TTT: the traces cross repeatedly near the boundary and the call is handed back
+and forth. (b) $H=6$ dB, TTT $=1$ s: one decisive handover.}
+\label{fig:handoff}
+\end{figure}
+
+\subsection{Comparing the two settings}
+\begin{table}[H]\centering\small
+\caption{Handover performance over 30 random channel realisations per setting.}
+\label{tab:handoff}
+\begin{tabular}{@{}ccccccc@{}}
+\toprule
+$H$ (dB) & TTT (s) & Handovers & 95th pct. & Ping-pongs & Degraded (\%) & RSRP at HO (dBm) \\
+\midrule
+%%HANDOFF_STATS%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The trade-off is monotone in the table.} At $H=2$ dB with no TTT the handset performs about
+32 handovers per crossing with 23 ping-pongs, so the network is thrashing. Raising to $H=9$ dB with
+a 2 s TTT cuts that to 1.7 handovers and near-zero ping-pongs, but degraded time climbs to
+5.69\%. That is the classical conflict:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Too little hysteresis} gives \emph{repeated switching}: signalling load,
+interruption on every hard handover, and a higher drop probability simply because there are more
+chances to fail.
+\item \textbf{Too much hysteresis} gives \emph{late handover}: the call stays on a cell that has
+already faded, so the terminal transmits at maximum power into a poor channel and can hit
+radio-link failure before the handover completes.
+\end{itemize}
+
+The optimum is where the ping-pong count has already collapsed but the degraded-time fraction has
+not yet risen. Table~\ref{tab:handoff} puts that region at $H=3$-$4$ dB with TTT around 1 s.
+
+\subsection{Recommended settings}
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Urban: $H=3$ dB, TTT $=0.5$ s.} Cells are small (1.58 km) and users cross many
+boundaries, so handovers must be prompt. 0.5 s of TTT is long enough to reject Rayleigh dips (the
+fade decorrelates in about 10 ms, so a 0.5 s window spans many independent fades) but short enough
+to hand over before the $-85$ dBm threshold. Ping-pongs fall from about 23 to 3.
+\item \textbf{Rural: $H=6$ dB, TTT $=1$ s.} Cells are large (2.5 km), so crossings are rare and
+there is time to be conservative. A larger hysteresis suppresses the ping-pong that would
+otherwise occur across flat rural terrain, where the two site levels stay within a few dB for
+hundreds of metres, and 1 s of TTT costs almost nothing because the handset spends only 0.02\% of
+the crossing below threshold.
+\end{itemize}
+
+\subsection{How dropped calls would be measured}
+Define a dropped call operationally, then instrument it:
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{RRC connection abnormal release} with a cause other than normal release and no
+subsequent re-establishment within a short window. This is the primary KPI, from MME/eNB counters. Call
+drop rate equals abnormal releases divided by successfully established connections, per cell and
+per area, reported hourly and at busy hour.
+\item \textbf{Handover-specific drops:} handover failures (target preparation failure,
+re-establishment failure) divided by handover attempts. This isolates the late-handover mechanism
+from coverage drops.
+\item \textbf{Radio-link failure (RLF) count} per cell, together with the RSRP and SINR at the
+moment of failure. If failures cluster just before a boundary, hysteresis is too large; if they
+cluster mid-cell, it is coverage.
+\item \textbf{End-to-end corroboration:} a synthetic call generator plus a drive test on the two
+crossing routes, logging RSRP, SINR, handover events and gaps. This catches failures that network
+counters attribute elsewhere.
+\end{enumerate}
+
+\section{Q6: Speech coding and voice capacity}
+\label{sec:q6}
+
+\subsection{PCM bit rate}
+For 8-bit PCM sampled at 8 kHz~\cite{g711}:
+\[
+R_b = f_s\times n = 8000\times8 = \key{64000\ \text{bit/s} = 64\ \text{kbit/s}}.
+\]
+The quantisation signal-to-noise ratio for a full-scale sinusoid is
+$6.02n+1.76 = 6.02(8)+1.76 = 49.92$ dB, and the ideal minimum baseband bandwidth is
+$R_b/2 = 32$ kHz.
+
+\subsection{Comparison of coding methods}
+\begin{table}[H]\centering\small
+\caption{Speech coding techniques compared. The star marks the recommendation.}
+\label{tab:codecs}
+\begin{tabularx}{\textwidth}{@{}p{4.3cm}cp{1.9cm}p{2.0cm}p{1.7cm}X@{}}
+\toprule
+\textbf{Method} & \textbf{Bit rate} & \textbf{Bandwidth} & \textbf{Quality} & \textbf{Complexity} & \textbf{Typical use} \\
+& kbit/s & & & & \\
+\midrule
+%%CODECS%%
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Why the ordering is what it is.} PCM is a \emph{waveform} coder: it transmits the sample
+itself, so quality is high and complexity almost zero, but 64 kbit/s is expensive over radio.
+DPCM transmits the \emph{prediction error}; because adjacent speech samples correlate strongly,
+4 bits suffice where PCM needs 8, halving the rate at a small quality cost. Delta modulation goes
+further, to 1 bit per sample, by transmitting only the \emph{direction} of change, hence low
+complexity but slope-overload and granular noise. LPC and the vocoders model the \emph{vocal
+tract} instead of the waveform, so 2.4-13 kbit/s is achievable, at the cost of significant DSP
+and a more synthetic timbre. The AMR-NB family used in GSM and VoLTE~\cite{amr,ts26071} sits at the sweet spot:
+12.2 kbit/s, near-toll quality, and adaptive between modes.
+
+\paragraph{Recommendation.} \key{AMR-NB at 12.2 kbit/s (ACELP, an LPC-class parametric coder)},
+with EVS as the upgrade path where handsets support it. It is 5.2 times more efficient than PCM,
+delivers 3.9 MOS against PCM's 4.3 at 14\% of the rate, and is the standard VoLTE codec, so it
+interoperates with the existing core. Delta modulation is rejected because its 2.8 MOS quality is
+audible on a mobile link, and LPC-10 is rejected because 2.6 MOS synthetic speech is unacceptable
+for a service the regulator will monitor.
+
+\subsection{Offered voice traffic and Erlang-B dimensioning}
+With 0.02 Erlang per subscriber (a busy-hour average busy fraction), offered traffic is
+\[
+A_{\text{urban}} = 0.02\times10\,000 = 200\ \text{E},\qquad
+A_{\text{rural}} = 0.02\times2\,000 = 40\ \text{E}.
+\]
+Erlang B~\cite{erlang}, $B(A,N)=\frac{A^N/N!}{\sum_{k=0}^{N}A^k/k!}$, is solved for the smallest $N$ with
+$B\leq2\%$.
+
+\begin{table}[H]\centering\small
+\caption{Erlang-B dimensioning for voice at 2\% blocking.}
+\label{tab:voice}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+& Subscribers & Offered $A$ (E) & Channels $N$ & $B$ at $N$ & $B$ at $N{-}1$ & Utilisation & Per sector \\
+\midrule
+%%VOICE%%
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Reading the table.} Urban needs 214 channels; at 213 the blocking rises to 2.18\% and
+misses the target, so 214 is the true minimum, a good sanity check that the dimensioning is not
+over-provisioned. Rural needs 50 channels. Spread over two three-sector sites this is 35.7 and 8.3
+channels per sector respectively, both trivially available inside a 20 Mbit/s VoLTE sector.
+
+\paragraph{Why packet voice needs extra overhead accounting.} Circuit-switched voice consumes
+exactly one 64 kbit/s channel. Packet voice does not: the speech payload travels inside
+RTP/UDP/IP headers that are pure overhead. With 12.2 kbit/s AMR in 20 ms frames the payload is
+30.5 bytes per frame, while RTP(12)+UDP(8)+IPv4(20) and the LTE PDCP/RLC/MAC headers add 46
+bytes:
+
+\begin{center}\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+& Payload (B) & Headers (B) & Wire rate (kbit/s) \\
+\midrule
+No header compression & 30.5 & 46 & 30.6 \\
+With ROHC (3 B) & 30.5 & 9 & 15.8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Without compression the 12.2 kbit/s codec actually occupies 30.6 kbit/s on the air, a 151\%
+overhead, so more than half the radio capacity is headers. Robust Header Compression (ROHC) cuts
+this to 29.5\% and 15.8 kbit/s. This is why VoLTE capacity planning must be done on the \emph{wire}
+rate, not the codec rate, and why semi-persistent scheduling matters: it removes the per-packet
+grant signalling that would otherwise dominate for small voice packets.
+
+\section{Q7: Defending the final design}
+\label{sec:q7}
+
+\subsection{The costed plan}
+Every line below is a real equipment class; the full bill of materials with vendor and standards
+links is in Appendix~\ref{app:bom}. Unit costs are the assignment's teaching values; the linked
+datasheets justify the \emph{technical} choice, not the price.
+
+\begin{table}[H]\centering\small
+\caption{Budget roll-up against the BDT 30.0 M cap (full BOM with links: Appendix~\ref{app:bom}).}
+\label{tab:budget}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Line} & \textbf{Item} & \textbf{Qty} & \textbf{Unit (BDT M)} & \textbf{Total (BDT M)} \\
+\midrule
+%%BUDGET%%
+\midrule
+\multicolumn{4}{@{}l}{\textbf{Capital cost}} & \textbf{28.8} \\
+\multicolumn{4}{@{}l}{10\% contingency} & 2.88 \\
+\multicolumn{4}{@{}l}{\textbf{Total including contingency}} & \textbf{31.68} \\
+\multicolumn{4}{@{}l}{Budget cap} & 30.00 \\
+\multicolumn{4}{@{}l}{\textbf{Overrun with contingency}} & \textbf{+1.68} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Backhaul capacity.} Each site is provisioned with 1 Gbit/s (licensed 18/23 GHz
+microwave for the rural hops, GPON fibre where duct exists). Against 60 Mbit/s of urban
+busy-hour demand that is a 3.0\% load; backhaul is therefore explicitly \emph{not} the binding
+constraint, and no backhaul upgrade is costed.
+
+\subsection{Two alternatives compared}
+\begin{table}[H]\centering\small
+\caption{Alternatives against coverage, capacity, cost and emergency continuity.}
+\begin{tabularx}{\textwidth}{@{}p{2.9cm}XXX@{}}
+\toprule
+& \textbf{A: recommended} & \textbf{B: coverage-first} & \textbf{C: capacity-first} \\
+\midrule
+Urban & 2 macros, 900+1800 MHz, hospital small cell & 1 macro + 4 small cells & 2 macros + 3 small cells \\
+Rural & 2 macros 900 MHz + clinic small cell & 2 macros 900 MHz, no small cell & 3 macros, 1800 MHz added \\
+Outdoor coverage & U 99.0\% / R 97.8\% & U 99.0\% / R 97.8\% & U 99.9\% / R 99.0\% \\
+Busy-hour load & U 37.5\% / R 12.5\% & U 75\% (single site) & U 25\% / R 8\% \\
+Site-failure tolerance & survives (75\% on survivor) & \textbf{fails}: one site is the area & survives easily \\
+Hospital / clinic & both on dedicated small cells & hospital only & both \\
+Capital cost & \textbf{BDT 28.8 M} & about BDT 24.8 M & BDT 35.6 M \\
+Within budget? & yes (4.0\% headroom) & yes & \textbf{no, +5.6 M} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Why B is rejected despite being cheapest.} A single urban macro looks attractive:
+coverage is identical and it saves a full BDT 6 M site. But it runs at 75\% load with \emph{no
+redundancy at all}: any single failure removes the whole neighbourhood, and the hospital small
+cell's donor goes with it. It also cannot absorb the 50\% growth test. Saving BDT 4 M by making an
+entire area a single point of failure is not a defensible engineering trade.
+
+\paragraph{Why C is rejected.} It is technically the strongest, with more capacity and the best
+coverage, but it costs \textbf{BDT 35.6 M, i.e. BDT 5.6 M (18.7\%) over the cap}. It is recorded
+here as the target state for the staged upgrade rather than as a candidate for this budget.
+
+\subsection{Test 1: one site failure}
+Remove one of the two urban macro sites; the survivor must carry the entire 60 Mbit/s demand from
+its own 80 Mbit/s of capacity:
+\[
+\text{load} = \frac{60}{80} = 75.0\% \;(<100\%) \;\Rightarrow\; \text{service held, degraded.}
+\]
+The area degrades (users near the lost site fall back to a more distant cell and see lower
+throughput) but no user is denied service, and the hospital small cell keeps working because its
+coverage is now provided by the survivor. Under the \emph{combined} worst case of one site failure
+\emph{and} 50\% growth, the survivor must carry 90 Mbit/s against 80 Mbit/s, i.e. 112.5\%, a
+10 Mbit/s shortfall. That is quantified honestly rather than hidden: it is the trigger condition
+for the Phase-2 site.
+
+\subsection{Test 2: 50\% traffic increase}
+\begin{center}\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+& Demand (Mbit/s) & Capacity (Mbit/s) & Load (\%) \\
+\midrule
+Urban, +50\% & 90.0 & 160.0 & 56.2 \\
+Rural, +50\% & 7.5 & 40.0 & 18.7 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Both areas absorb 50\% growth without new hardware (56.2\% and 18.7\% load). The rural area has so
+much headroom that it could absorb 400\% growth before needing a third carrier, which is the
+quantitative argument for not building the rural 1800 MHz layer now.
+
+\subsection{Resolving stakeholder priorities}
+\begin{table}[H]\centering\small
+\caption{Conflicting stakeholder priorities and the resolution adopted.}
+\begin{tabularx}{\textwidth}{@{}p{2.5cm}p{3.5cm}X@{}}
+\toprule
+\textbf{Stakeholder} & \textbf{Priority} & \textbf{How it is resolved in the design} \\
+\midrule
+Operator & lowest cost per covered user; capex discipline & Prioritise sectoring over new sites (nearly free capacity), one shared DC plant per site rather than per radio, and defer the third urban site to Phase 2. \\
+Community & reliable everyday service; visible fairness & Both areas get two macros so neither is obviously favoured; rural gets the more expensive 24-hour energy solution because flood risk is higher there. \\
+Hospital / clinic & continuity during an outage, above all & Dedicated small cells on dedicated DC plants; the 8-hour urban outage does not touch the clinic's 24-hour one. Continuity is \emph{hard-allocated}, not hoped for. \\
+Regulator & blocking and coverage targets met & Dimensioned to 1.99\% blocking and 97.8\% worst-area coverage; both are documented so they can be audited. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The principle: \emph{protect the irreducible requirement, trade on the elastic one}. Hospital
+continuity is irreducible and hard-allocated; capacity is elastic and met with spectrum and
+sectorisation before steel; cost is traded last.
+
+\subsection{The budget shortfall and a staged upgrade}
+The base plan is BDT 28.8 M, which fits with BDT 1.2 M of headroom. But a prudent 10\%
+contingency is BDT 2.88 M, taking the total to BDT 31.68 M, which is \key{BDT 1.68 M over the cap}.
+That is stated as genuine infeasibility, not absorbed by wishful thinking.
+
+\begin{table}[H]\centering\small
+\caption{Staged upgrade plan with quantified shortfall.}
+\label{tab:stages}
+\begin{tabularx}{\textwidth}{@{}p{0.75cm}p{4.7cm}Xp{1.85cm}@{}}
+\toprule
+\textbf{Stage} & \textbf{Scope} & \textbf{Justification and trigger} & \textbf{Cost} \\
+\midrule
+1 & 2 urban macros, 2 rural macros, 2 small cells, 8 h urban backup, 24 h rural backup & Now. Meets every stated target. & BDT 28.8 M \\
+2 & Fund the contingency from first-year opex & Now. The 1.68 M overrun is closed by funding the contingency reserve from operating cash flow, normal practice for a plan with 1.2 M of unallocated headroom. & +0 (timing) \\
+3 & Third urban macro site and 8 h backup & When busy-hour load exceeds 70\%, or a site fails during growth. Restores N+1 and covers the 10 Mbit/s shortfall quantified above. & BDT 6.4 M \\
+4 & Rural 1800 MHz carrier & When rural demand exceeds 20 Mbit/s. Not needed until rural demand grows fourfold; adding it early would waste BDT 1 M of spectrum capex. & BDT 1.0 M \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+So the honest answer to ``does it fit?'' is: \textbf{the engineering fits at BDT 28.8 M, but a
+fully risk-reserved plan does not fit by BDT 1.68 M}, and the third site would not fit by BDT
+5.2 M. We deliver Stages 1-2 inside the cap and hold Stage 3 as a measured, triggered commitment.
+
+\subsection{Target-compliance table}
+All eight stated targets are met; the full table with the checking method for each is
+Table~\ref{tab:compliance} in Appendix~\ref{app:calc}.
+
+\section{Limitations and what would change the answer}
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item The log-distance model with a single exponent ignores terrain. Kurigram is flood-prone and
+flat; a real design would use ITU-R P.1546~\cite{p1546} with a digital elevation model plus clutter data, which
+could move the rural radius by $\pm15\%$.
+\item Sectors are modelled as ideal 65$^\circ$ patterns. Real patterns have back lobes that raise
+$i_0$ above 2 and cut the $N=1$ $C/I$ by 1-2 dB.
+\item The Erlang-B model assumes Poisson arrivals and no handover priority. Real networks hold
+channels for handover, which raises blocking slightly above the computed 1.99\%.
+\item Prices are the assignment's teaching unit costs. A real procurement would add civil works,
+spectrum fees, site rental and opex, none of which are inside the BDT 30 M cap.
+\item The coverage prediction is a model, not a measurement. The compliance table therefore
+specifies a drive test as the acceptance criterion, so a model error becomes a field finding
+rather than a silent failure.
+\end{itemize}
+
+\renewcommand{\refname}{References}
+\begin{multicols}{2}
+\begin{thebibliography}{99}
+\setlength{\itemsep}{0pt}
+\footnotesize
+
+\bibitem{ts36104} 3GPP, ``E-UTRA: Base Station (BS) radio transmission and reception,'' TS 36.104.
+[Online]. Available: \url{https://www.3gpp.org/ftp/Specs/archive/36_series/36.104/}
+
+\bibitem{ts36101} 3GPP, ``E-UTRA: User Equipment (UE) radio transmission and reception,''
+TS 36.101. [Online]. Available:
+\url{https://www.3gpp.org/ftp/Specs/archive/36_series/36.101/}
+
+\bibitem{ts36942} 3GPP, ``E-UTRA: Radio Frequency (RF) system scenarios,'' TS 36.942. [Online].
+Available: \url{https://www.3gpp.org/ftp/Specs/archive/36_series/36.942/}
+
+\bibitem{ts26071} 3GPP, ``Mandatory speech codec speech processing functions; AMR speech codec;
+General description,'' TS 26.071. [Online]. Available:
+\url{https://www.3gpp.org/ftp/Specs/archive/26_series/26.071/}
+
+\bibitem{ts23228} 3GPP, ``IP Multimedia Subsystem (IMS); Stage 2,'' TS 23.228. [Online].
+Available: \url{https://www.3gpp.org/ftp/Specs/archive/23_series/23.228/}
+
+\bibitem{p1546} ITU, ``Method for point-to-area predictions for terrestrial services in the
+frequency range 30 MHz to 3000 MHz,'' Recommendation ITU-R P.1546. [Online]. Available:
+\url{https://www.itu.int/rec/R-REC-P.1546/en}
+
+\bibitem{p2109} ITU, ``Prediction of building entry loss,'' Recommendation ITU-R P.2109.
+[Online]. Available: \url{https://www.itu.int/rec/R-REC-P.2109/en}
+
+\bibitem{p837} ITU, ``Characteristics of precipitation for propagation modelling,''
+Recommendation ITU-R P.837. [Online]. Available:
+\url{https://www.itu.int/rec/R-REC-P.837/en}
+
+\bibitem{p526} ITU, ``Propagation by diffraction,'' Recommendation ITU-R P.526. [Online].
+Available: \url{https://www.itu.int/rec/R-REC-P.526/en}
+
+\bibitem{g711} ITU, ``Pulse code modulation (PCM) of voice frequencies,'' Recommendation
+ITU-T G.711. [Online]. Available: \url{https://www.itu.int/rec/T-REC-G.711/en}
+
+\bibitem{g722} ITU, ``7 kHz audio-coding within 64 kbit/s,'' Recommendation ITU-T G.722.
+[Online]. Available: \url{https://www.itu.int/rec/T-REC-G.722/en}
+
+\bibitem{g168} ITU, ``Digital network echo cancellers,'' Recommendation ITU-T G.168. [Online].
+Available: \url{https://www.itu.int/rec/T-REC-G.168/en}
+
+\bibitem{rappaport} T. S. Rappaport, \emph{Wireless Communications: Principles and Practice},
+2nd ed. Upper Saddle River, NJ, USA: Prentice Hall, 2002.
+
+\bibitem{lee} W. C. Y. Lee, \emph{Mobile Cellular Telecommunications: Analog and Digital
+Systems}, 2nd ed. New York, NY, USA: McGraw-Hill, 1995.
+
+\bibitem{erlang} Westbay Engineers, ``Erlang B calculator.'' [Online]. Available:
+\url{https://www.erlang.com/calculator/erlb/}
+
+\bibitem{berawgn} MathWorks, ``BERAWGN: theoretical bit error rate in AWGN.'' [Online].
+Available: \url{https://www.mathworks.com/help/comm/ref/berawgn.html}
+
+\bibitem{itustats} ITU, ``ITU-D statistics.'' [Online]. Available:
+\url{https://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx}
+
+\bibitem{worldbank} The World Bank, ``Individuals using the Internet (\% of population),
+Bangladesh.'' [Online]. Available:
+\url{https://data.worldbank.org/indicator/IT.NET.USER.ZS?locations=BD}
+
+\bibitem{gsma} GSMA, ``GSMA Intelligence: mobile economy data.'' [Online]. Available:
+\url{https://www.gsmaintelligence.com/}
+
+\bibitem{opensignal} Opensignal, ``Mobile experience reports.'' [Online]. Available:
+\url{https://www.opensignal.com/}
+
+\bibitem{ookla} Ookla, ``Speedtest Global Index.'' [Online]. Available:
+\url{https://www.ookla.com/}
+
+\bibitem{handover} A. R. Mishra, \emph{Advanced Cellular Network Planning and Optimisation:
+2G/2.5G/3G\ldots Evolution to 4G}. Chichester, U.K.: Wiley, 2007.
+
+\bibitem{amr} 3GPP, ``AMR speech codec; General description,'' TS 26.071. [Online]. Available:
+\url{https://www.3gpp.org/ftp/Specs/archive/26_series/26.071/}
+
+\end{thebibliography}
+\end{multicols}
+
+\appendix
+\section{Calculation sheet}
+\label{app:calc}
+
+\subsection{Assumptions and justification}
+\begin{table}[H]\centering\small
+\caption{Every design value the assignment did not supply, with justification.}
+\label{tab:assume}
+\begin{tabularx}{\textwidth}{@{}p{3.5cm}p{1.9cm}X@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value used} & \textbf{Justification} \\
+\midrule
+Reference distance $d_0$ & 100 m & Given. Free space is valid at $d_0$ for a mast-height antenna. \\
+Reference loss $PL(d_0)$, 900 MHz & 71.5 dB & Free space: $20\log_{10}(4\pi d_0 f/c)$ with $d_0=100$ m, $f=900$ MHz. \\
+Reference loss $PL(d_0)$, 1800 MHz & 77.6 dB & Same formula at 1800 MHz: the expected 6.02 dB offset. \\
+Path-loss exponent $n$ & 3.5 urban / 3.0 rural & Given, and inside the ranges quoted in the course notes. \\
+BS antenna gain & 16 dBi at 900, 18 dBi at 1800 & 65$^\circ$ three-sector panel; the 2 dB difference follows the shorter wavelength. \\
+Handset gain & 0 dBi & Omnidirectional handset; body loss carried separately. \\
+BS noise figure & 5 dB & Typical macro RRU. \\
+Handset noise figure & 7 dB & Typical mass-market handset front end. \\
+Feeder loss & 0.5 dB & RRU mounted at the mast head, so only a short jumper is lossy. \\
+Body / head loss & 3 dB & Standard handset body-loss allowance. \\
+Receiver $C/N$ requirement & 7 dB & Derived in Section~\ref{sec:q2}, not assumed. \\
+Shadow margin (urban / rural) & 10 dB / 8 dB & 90\%-of-locations edge reliability with $\sigma=8$ dB urban, 6 dB rural. \\
+Indoor margin (urban / rural) & 12 dB / 8 dB & Multi-wall concrete urban against single-wall brick rural, consistent with ITU-R P.2109 classes~\cite{p2109}. \\
+Interference margin & 2 dB & Allows for a fractional-reuse or $N=1$ capacity layer. \\
+Clutter margin (rural) & 2 dB & Foliage and scattered village structures. \\
+Spectral efficiency & 2.5 bit/s/Hz & 10 MHz FDD, 2$\times$2 MIMO, 64-QAM averaged over the cell. \\
+Frame overhead & 20\% & Control channels, reference signals and guard bands. \\
+Backhaul per site & 1 Gbit/s & Licensed 18/23 GHz microwave or GPON fibre. \\
+Busy-hour load target & $\leq$70\% & Headroom for growth and for one site failure. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Worked link budget: urban 900 MHz uplink, step by step}
+\begin{center}\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Step} & \textbf{Value} & \textbf{Working} \\
+\midrule
+Handset EIRP & 20.0 dBm & $P_t + G_t - L_{\text{body}} = 23 + 0 - 3$ \\
+Path loss allowed at BS & 127.5 dB & $\text{EIRP} + G_{bs} - L_{\text{feeder}} - S_{bs} = 20 + 16 - 0.5 + 92.0$ \\
+Thermal noise, 10 MHz & $-99.0$ dBm & $-174 + 70 + 5$ \\
+BS sensitivity & $-92.0$ dBm & $N_{bs} + C/N = -99.0 + 7.0$ \\
+Total margin & 12.0 dB & shadow 10 + interference 2 \\
+Net budget & 115.5 dB & $127.5 - 12.0$ \\
+Log-distance inversion & 1801.7 m & $d_0\,10^{(115.5-71.5)/35}$ \\
+Downlink radius & 1579.5 m & $d_0\,10^{(113.5-71.5)/35}$ \\
+\textbf{Design radius} & \textbf{1579.5 m} & \textbf{downlink limits} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Site-count arithmetic}
+\[
+A_{\text{cell}} = \frac{3\sqrt3}{2}R^2 = 2.598R^2,\qquad
+N_{\text{sites}} = \frac{A_{\text{area}}}{2.598R^2}.
+\]
+Urban: $2.598(1.5795)^2 = 6.48$ km$^2$, so $4.0/6.48 = 0.62$ sites by geometry (2 built for
+capacity and redundancy). Rural: $2.598(2.502)^2 = 16.26$ km$^2$, so $25.0/16.26 = 1.54$, rounded
+up to 2.
+
+\subsection{Indoor link budgets}
+%%LINK_INDOOR%%
+
+\subsection{Delay-spread moments}
+\[
+\bar\tau = \sum_i p_i\tau_i,\qquad
+\overline{\tau^2} = \sum_i p_i\tau_i^2,\qquad
+\sigma_\tau = \sqrt{\overline{\tau^2}-\bar\tau^2}
+\]
+with $p_i = P_i/\sum_j P_j$ from the linear powers $[1.0,\ 0.501,\ 0.158]$, giving
+$\bar\tau=0.5885$ $\mu$s, $\overline{\tau^2}=1.1614$ $\mu$s$^2$ and
+$\sigma_\tau=0.9029$ $\mu$s.
+
+\subsection{Erlang-B arithmetic}
+\[
+B(A,N) = \frac{A^N/N!}{\sum_{k=0}^{N} A^k/k!},\qquad
+B(200,213) = 2.18\%,\quad B(200,214) = 1.99\%.
+\]
+The smallest $N$ meeting 2\% is therefore 214 channels for the urban area, and
+$B(40,49)=2.38\%$, $B(40,50)=1.87\%$ gives 50 channels for the rural area.
+
+\subsection{VoLTE overhead arithmetic}
+Speech payload per 20 ms frame: $12\,200\times0.020/8 = 30.5$ bytes. RTP+UDP+IPv4 $=40$ bytes
+plus PDCP+RLC+MAC $=6$ bytes gives 46 bytes of header. Wire rate without compression
+$=(30.5+46)\times8/0.020=30.6$ kbit/s; with ROHC (3 bytes) it is $15.8$ kbit/s, i.e. 77\% payload
+efficiency.
+
+\subsection{Target-compliance evidence}
+\begin{table}[H]\centering\footnotesize
+\caption{Every stated target with the evidence that checks it.}
+\label{tab:compliance}
+\begin{tabularx}{\textwidth}{@{}p{0.6cm}p{4.0cm}p{2.2cm}p{3.0cm}p{0.9cm}X@{}}
+\toprule
+& \textbf{Target} & \textbf{Required} & \textbf{Achieved} & \textbf{Status} & \textbf{How it is checked} \\
+\midrule
+%%TARGETS%%
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Hardware bill of materials with vendor links}
+\label{app:bom}
+Every line is a real equipment class. Links are to vendor product pages or the governing 3GPP / ITU
+specification, and each was checked to resolve. Unit costs are the assignment's teaching values.
+
+\begin{table}[H]\centering\footnotesize
+\caption{Hardware bill of materials: specification, rationale and references.}
+\begin{tabularx}{\textwidth}{@{}p{0.65cm}p{5.8cm}cp{1.35cm}p{4.3cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Item and specification} & \textbf{Qty} & \textbf{Unit cost} & \textbf{References} \\
+\midrule
+%%HARDWARE%%
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Supporting software and standards}
+
+\begin{table}[H]\centering\footnotesize
+\caption{Tools and standards used in the analysis.}
+\begin{tabularx}{\textwidth}{@{}p{4.3cm}Xp{6.2cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Why it is used} & \textbf{References} \\
+\midrule
+%%SOFTWARE%%
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Complete link register}
+Every hardware and standards link used in this report, collected for verification.
+
+{\scriptsize
+\begin{longtable}{@{}p{0.65cm}p{4.4cm}p{9.7cm}@{}}
+\toprule
+\textbf{Ref} & \textbf{Resource} & \textbf{URL} \\
+\midrule
+\endhead
+%%ALLLINKS%%
+\bottomrule
+\end{longtable}
+}
+
+\clearpage
+\section{Cisco Packet Tracer network model}
+\label{app:pt}
+
+The logical design in Section~\ref{sec:q7} was also built as a runnable Cisco Packet Tracer
+topology, so that the access, aggregation and core layers can be inspected as an end-to-end
+packet path rather than as a costing table alone. Figure~\ref{fig:pt} is a capture of that
+model. The topology file itself (\texttt{Cellular\_PT.pkt}) is supplied alongside this report
+and opens in Packet Tracer 8.x; Table~\ref{tab:ptinv} lists every device in it.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{figures/fig_pt_topology.png}
+\caption{Packet Tracer topology: two access rows per area (urban Dhaka, rural Kurigram),
+aggregation, and a shared EPC core with HSS, SGW, PGW, MME, IMS, plus firewall and ISP egress.}
+\label{fig:pt}
+\end{figure}
+
+\subsection{How the model maps onto the design}
+The simulator stands in for the radio layer rather than reproducing it. Packet Tracer has no
+LTE physical layer, so the four \texttt{Cell-Tower} objects represent the four macro sites of
+Table~\ref{tab:budget} (two urban, two rural), and each eNB is backhauled through a
+\texttt{2960} access switch and a \texttt{Central-Office-Server} to the aggregation router.
+The core follows the same EPC decomposition used in the Q4 and Q7 reasoning: MME for control
+plane, SGW/PGW for the user plane, HSS for subscriber data, IMS for VoLTE, and an edge firewall
+in front of ISP egress.
+
+\begin{table}[H]\centering\footnotesize
+\caption{Device inventory of the Packet Tracer model.}
+\label{tab:ptinv}
+\begin{tabularx}{\textwidth}{@{}p{5.3cm}p{0.8cm}X@{}}
+\toprule
+\textbf{Device} & \textbf{Qty} & \textbf{Role in the model} \\
+\midrule
+\texttt{Cell-Tower} CT-DHK-1/2, CT-KUR-1/2 & 4 & Macro sites, matching the four BDT 6.0 M sites \\
+\texttt{2911} eNB-DHK-1/2, eNB-KUR-1/2 & 4 & Baseband/EPC-facing node per site \\
+\texttt{2960} SW-DHK-1/2, SW-KUR-1/2 & 4 & Site access switching \\
+Central-Office-Server CO-DHK/KUR & 4 & Local service/central-office host \\
+\texttt{2911} AGG-DHK-1/2, AGG-KUR & 3 & Aggregation toward the core \\
+\texttt{3650} CORE-SW & 1 & Core switch fabric \\
+\texttt{2911} CORE-MME/SGW/PGW/IMS & 4 & EPC and IMS functions \\
+SRV-HSS/DHCP/NMS/INTRA/WWW & 5 & Subscriber, addressing, management, services \\
+\texttt{5505} FW-DHK, \texttt{2911} ISP-RTR & 2 & Security and external egress \\
+\texttt{7960} IP-HOSP-01/02, IP-CLINIC-01 & 3 & Hospital and clinic voice terminals \\
+AP-HOSP, AP-CLINIC & 2 & Indoor Wi-Fi, standing in for small cells \\
+UE-DHK-01..03, UE-KUR-01..04 & 7 & Mobile subscriber endpoints \\
+TAB-HOSP-01/02, TAB-CLINIC-01 & 3 & Indoor data clients \\
+SIM-ATTACKER & 1 & Traffic generator used to drive load \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{What the model does and does not show}
+The capture reproduces the structural claim of Q7, that both areas share one core and one
+budget, and it makes the hospital and clinic attachment points explicit. Two qualifications are
+recorded. First, the red link indicators on \texttt{IP-HOSP-01}, \texttt{IP-HOSP-02} and
+\texttt{IP-CLINIC-01} in Figure~\ref{fig:pt} mark access links that are down in the saved state,
+so continuity of the protected terminals is topology intent, not a passing test. Second, the
+BOM small cells appear as Wi-Fi access points, since Packet Tracer models no LTE small cell; no
+BER, SINR, reuse or Erlang result here is derived from the simulator, and the numerical results
+remain those of Appendices~\ref{app:calc} and~\ref{app:bom}.
+
+\end{document}
